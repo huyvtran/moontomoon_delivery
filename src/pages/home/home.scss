@@ -1,3 +1,108 @@
 page-home {
+    .entering{
+     
+    }
+.button-md{
+     height: 5rem;
+    font-size: 1.5rem;
+}
+    .title{
+        line-height:3rem;
+        float:left;
+        padding:0;
+        width: 30%;
+    }
+    .title_menu{
+        width:100%;
+    }
+    .header header-md{
+        height:30%;
+    }
+    title title-md{
+        height:30%;
+    }
+    .img{
+        border-radius: 50%;
+    }
+    button.nav{
+        background-color:transparent;
+      color:#000;
+      float:right;
+    }
+  .c{
+      .profile{
+        text-align: center;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2rem;
+      }
+      
+        top:0%;
+      .scroll-content{
+          .list list-md{
+              text-align: center;
+          }
+        top:0%;
+      }
+      .img{
+          max-width:40%;
+      }
+      
+  }
 
+  .scroll-content {
+        overflow: hidden;
+        padding-bottom: 0px;
+    }
+    ion-app.md [padding] .scroll-content {
+    padding:0px;
+    }
+    .home{
+
+        padding:0px;
+        position:relative;
+        .isactive{
+                display:none;
+            }
+        .upper{
+            
+            position: absolute;
+            z-index: 111111;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            width: 80%;
+            height:25%;
+            border: 3px solid #73AD21;
+            padding: 10px;
+            text-align: center;
+            background-color:#ffffff;
+            .row{
+                height: 50%;
+                margin-bottom: 1rem;
+            }
+            .col{
+                padding:0px;
+            }
+        }
+        .bottom{
+                position: absolute;
+                bottom: 0;
+                height: 40%;
+                top: 99%;
+                width: 100%;
+                margin: auto;
+    }
+    .request-control{
+        text-align: center;
+        background: linear-gradient(transparent,map-get($colors,light))
+    }
+    .map-wrapper{
+        width:100%;
+        height:100%;
+    }
+    }
+    
 }

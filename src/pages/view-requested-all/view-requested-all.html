@@ -1,0 +1,39 @@
+<!--
+  Generated template for the ViewRequestedAllPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>viewRequestedAll</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+      <p *ngFor="let item of result_date">{{item}}
+          <ion-item  >
+                  <ion-card  *ngFor="let item2 of result" >
+                    <p *ngIf="item === item2.onlyDate">
+                      <ion-card-header>
+                        {{item2.user}} 오더번호 : {{item2.orderNo}}
+                      </ion-card-header>
+                      <ion-card-content>
+                      출발역:  {{item2.startPoint}} &nbsp; &nbsp; <br>
+                      도착역:  {{item2.endPoint}} &nbsp; &nbsp; <br>
+                      신청시간 {{item2.create_date}}
+                      </ion-card-content>
+                    </p>
+                  </ion-card  >
+                </ion-item>
+      </p>
+        
+      
+      
+  </ion-list>
+  
+</ion-content>

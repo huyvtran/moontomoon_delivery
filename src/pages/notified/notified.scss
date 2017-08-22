@@ -1,0 +1,47 @@
+page-notified {
+    .main-view{
+        background: transparent;
+      }
+      .title_title{
+        line-height:3rem;
+        float:left;
+        padding:0;
+        width: 25%;
+        margin-left:20px;
+    }
+    .title{
+        line-height:3rem;
+        float:left;
+        
+        padding:0;
+        width: 25%;
+    }
+    button.nav{
+        background-color:transparent;
+      color:#000;
+      float:left;
+    }
+      .modal_content {
+        position: absolute;
+        top: calc(50% - (50%/2));
+        left: 0;
+        right: 0;
+        width: 70%;
+        height: 50%;
+        padding: 10px;
+        z-index: 100;
+        margin: 0 auto;
+        padding: 10px;
+        color: #333;
+        background: #e8e8e8;
+        background: -moz-linear-gradient(top, #fff 0%, #e8e8e8 100%);
+        background: -webkit-linear-gradient(top, #fff 0%, #e8e8e8 100%);
+        background: linear-gradient(to bottom, #fff 0%, #e8e8e8 100%);
+        border-radius: 5px;
+        box-shadow: 0 2px 3px rgba(51, 51, 51, .35);
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        overflow: hidden;
+      }
+}
