@@ -6,7 +6,7 @@
     <div class="title">
       지하철택배(배달원)
     </div>
-      <ion-toggle [(ngModel)]="isToggled" style="float:right"  (ionChange)="notify()">activate</ion-toggle>
+      <ion-toggle [(ngModel)]="isToggled" style="float:right"  (ionChange)="startTracking()"></ion-toggle>
    
       <button class="nav"  ion-button (click)="viewRequestedAll()">history</button>
      
@@ -21,40 +21,6 @@
 
 <ion-content scroll="false" class="home">
 
-  <div class="upper" id="upper">
-    <ion-row >
-      <ion-col width-100> 
-      <ion-list >
-       <ion-item>
-        <ion-input placeholder="출발역 입력해주세요" (focus)="entered()" [(ngModel)]="startPoint" clearInput>{{startPoint}}</ion-input>
-      </ion-item>
-      </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row (click)="endingPoint()"> 
-       <ion-col width-100>
-            <ion-list>
-              <!-- <ion-item>
-                  <ion-label color="primary" floating>도착역</ion-label>
-                   <ion-input [(ngModel)]="destination"></ion-input>
-              </ion-item> -->
-                   <ion-item>
-                    <ion-input placeholder="도착역 입력해주세요"  [(ngModel)]="endPoint" (focus)="endingPoint()"  clearInput>{{endPoint}}</ion-input>
-                  </ion-item>
-            </ion-list>
-       </ion-col>
-    </ion-row>
-      
-    
-
-    <ion-row>
-      <ion-col>
-        <button  ion-button block color="dark" (click)="requesting()"  >신청하기</button>
-          {{start}}   {{destination}}
-      </ion-col>
-    </ion-row>
-    
-  </div>
   <div class="map-wrapper">
     <map (sLat)="sLat($event)" (sLng)="sLng($event)" (eLat)="eLat($event)" (eLng)="eLng($event)" (startLocation)="startLocation($event)" (endLocation)="endLocation($event)" (starting)="starting($event)"  (ending)="ending($event)"  (drag_second)="drag_second($event)" #map [isPickupRequested]="isPickupRequested"  [startLat]="startLat" [startLng]="startLng" [endLat]="endLat" [requested]="requested" [endLng]="endLng"></map>
   </div>

@@ -37,6 +37,8 @@
         "@types/google-maps": "^3.2.0",
         "angularfire2": "^4.0.0-rc.1",
         "cordova-android": "^6.2.3",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-add-swift-support": "^1.6.0",
         "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-console": "^1.0.7",
         "cordova-plugin-device": "^1.1.6",
@@ -78,7 +80,6 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-geolocation": {},
             "cordova-plugin-mauron85-background-geolocation": {
                 "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
                 "CONTENT_AUTHORITY": "$PACKAGE_NAME"
@@ -90,10 +91,12 @@
             "onesignal-cordova-plugin": {},
             "cordova-plugin-dialogs": {},
             "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-x-toast": {}
+            "cordova-plugin-x-toast": {},
+            "cordova-plugin-geolocation": {}
         },
         "platforms": [
-            "android"
+            "android",
+            "ios"
         ]
     }
 }

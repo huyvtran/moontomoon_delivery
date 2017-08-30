@@ -73,6 +73,8 @@ export class ViewRequestListPage {
     this.navCtrl.push(ChatPage,{item:itemObject})
   }
   confirm(itemObject){
+    //배달완료 버튼을 눌렀을때, 
+
     this.request=itemObject;
     this.request.status="finished";
     this.afDatabase.object('/requestedList/assigned/'+itemObject.orderNo).remove();
@@ -92,8 +94,8 @@ export class ViewRequestListPage {
     let todaywithTime = mm+"/"+dd+"/"+time;
     let todayNoTime= yyyy+" "+mm+" "+dd;
 
-    var notificationObj = {title:{en:"배달원 완료"}, contents: {en:"클릭하시면 기사분 평점/리뷰를 남기실 수 있습니다."},
-    "data": {"status": "finished", "id":this.userId,"foto":this.foto,"time": todaywithTime,},
+    var notificationObj = {title:{en:"배달 완료"}, contents: {en:"클릭하시면 기사분 평점/리뷰를 남기실 수 있습니다."},
+    "data": {"status": "finished", "id":this.userId,"foto":this.foto,"time": todaywithTime,"uid":itemObject.uid,"orderno":itemObject.orderNo,"itemObject":itemObject},
     include_player_ids: [itemObject.tokenId]};
     if(this.platform.is('android')){
       window["plugins"].OneSignal.postNotification(notificationObj,
@@ -116,7 +118,7 @@ export class ViewRequestListPage {
           console.log("Notification Post Failed: ", failedResponse);
           });
   }else{
-
+    alert("not applicable on web. ")
   }
      
   }

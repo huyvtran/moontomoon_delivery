@@ -20,7 +20,7 @@ export class PickupDirective   {
     private pickupMarker: any;
     private popup:any;
     public isactive:any;
-    constructor(public loading:LoadingController,public geo:Geolocation){
+    constructor(){
          console.log("PickupDirective")
     }
    

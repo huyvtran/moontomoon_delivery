@@ -6,7 +6,7 @@ import { User } from './../../components/models/user';
 import { SignupPage } from './../signup/signup';
 import { HomePage } from './../../pages/home/home';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, LoadingController,NavController, NavParams, ToastController } from 'ionic-angular';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { AngularFireModule} from 'angularfire2';
 import firebase from 'firebase';
@@ -34,9 +34,8 @@ export class LoginPage implements OnInit {
   verificationCode: string;
   tokenId:string;
   users: any;
-    requestToken:any;
-  constructor(public toast:ToastController, public afAuth : AngularFireAuth,public afDatabase:AngularFireDatabase, public navCtrl: NavController,public googleplus:GooglePlus,public afauth:AngularFireAuth,public afd:AngularFireDatabase) {
-  
+  requestToken:any;
+  constructor(public loading:LoadingController,public toast:ToastController, public afAuth : AngularFireAuth,public afDatabase:AngularFireDatabase, public navCtrl: NavController,public googleplus:GooglePlus,public afauth:AngularFireAuth,public afd:AngularFireDatabase) {
    
 
   }
@@ -104,6 +103,13 @@ export class LoginPage implements OnInit {
     }
     }
   googleLogin(){
+    let loading=this.loading.create({
+      content:'Loading...'
+    })
+    loading.present().then(()=>{
+    })
+
+
     window["plugins"].OneSignal
     .startInit("2192c71b-49b9-4fe1-bee8-25617d89b4e8", "916589339698")
     
@@ -114,9 +120,11 @@ export class LoginPage implements OnInit {
     this.googleplus.login({
       'webClientId':'916589339698-n71c3mmpsclus88rk6fp99la7sh0vnga.apps.googleusercontent.com'
     }).then((res)=>{
+      
       firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(res.idToken)).then(
         suc=>{
           this.afAuth.authState.subscribe(auth=>{
+            loading.dismiss();
             localStorage.setItem("uid",auth.uid);
             localStorage.setItem("tokenId",this.tokenId);
             var count=0;
@@ -124,7 +132,7 @@ export class LoginPage implements OnInit {
             localStorage.setItem("foto",res.imageUrl);
             this.items=this.afDatabase.list('profile/'+auth.uid, { preserveSnapshot: true })
             this.items.subscribe(snapshots=>{
-              if(snapshots.length%6==0){
+              if(snapshots.length%6==0||snapshots.length%7==0){
                 this.navCtrl.setRoot(HomePage)
               }
               if(snapshots.length==0){

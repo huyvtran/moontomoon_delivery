@@ -13,4 +13,10 @@ export interface request{
     onlyDate:string
     deliveryGuy:string
     uid:string
+
+
+    freight_weight:string;
+    freight_size:string;
+    freight_content:string;
+    request_text:string;
 }
