@@ -1,0 +1,88 @@
+
+<ion-content class="main-view" padding>
+  
+<div class="modal_content">
+    
+    <div class="header">배달 상세 내용</div>
+    <div class="content_main">
+      
+      <div class="info">
+          <div class="orderno">
+              {{orderNo}}
+          </div>
+          <div class="start">
+                  출발지점 : {{start}} <button  style="float:right" class="btn" ion-button (click)="change(start)">변경</button>
+          </div>
+          <div class="end">
+                  도착지점 : {{end}} <button  style="float:right" class="btn" ion-button (click)="change(end)">변경</button> 
+          </div>
+      </div> 
+      <div class="freight">
+        <div class="time">
+              <ion-list class="time_list" >
+                      <div class="radio_header">
+                          <label>희망 배송 시간</label>
+                        </div>  
+                        <div class="radio_content">
+                            <ion-item class="desired_time" >
+                                <ion-label>최대한 빨리</ion-label>
+                            </ion-item>
+                        </div>
+                  </ion-list>
+        </div>
+        <div class="freight_info">
+              <div class="radio_header">
+                  <label>배송품의 정보를 입력하세요</label>
+              </div> 
+              <div class="type_image">
+                  <div class=img_animal>
+                      <img src="{{image}}" />
+                  </div>
+                  
+              </div>
+              <div class="content_text">
+                  <textarea name="review" placeholder="기타 요구사항/ 하실 말씀을 적어주세요!" [(ngModel)]="request_text" id="" cols="45" rows="5" style="width:100%" class="review"></textarea>
+              </div>
+           </div>
+
+          
+        
+
+        <!-- <div class="freight_info">
+          <div class="freight_content">
+              <ion-list>
+                  <ion-item>
+                      <input type="text" name="" placeholder="화물 내용을 입력하세요" [(ngModel)]="content">
+                  </ion-item>
+                </ion-list>
+
+          </div>
+          <div class="freight_weight">
+              <ion-list>
+                  <ion-item>
+                      <input type="text" name="" placeholder="화물 무게을 입력하세요" [(ngModel)]="weight">
+                  </ion-item>
+                </ion-list>
+          </div>
+          <div class="freight_size">
+              <ion-list>
+                  <ion-item>
+                      <input type="text" name="" placeholder="화물 크기를 입력하세요" [(ngModel)]="size">
+                  </ion-item>
+                </ion-list>
+                
+          </div>
+          
+        </div> -->
+      </div>
+      
+    
+    </div>
+    
+    <div class="footer">
+      <button class="confirm" ion-button (click)="confirm()">제출</button>
+      <button class="confirm" ion-button (click)="cancel()">취소</button>
+    </div>
+ 
+</div>
+</ion-content>

@@ -15,8 +15,6 @@ export interface request{
     uid:string
 
 
-    freight_weight:string;
-    freight_size:string;
-    freight_content:string;
+    type:string
     request_text:string;
 }

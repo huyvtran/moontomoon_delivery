@@ -6,6 +6,30 @@ page-home {
      height: 5rem;
     font-size: 1.5rem;
 }
+.km{
+    width:25%;
+    float:left;
+}
+.radio_header{
+    text-align: center;
+    margin-top: 5px;
+}
+
+.viewStyle{
+    width:40%;
+    float:left;
+    margin-top:auto;
+    box-shadow:0 3px 9px 3px #999;}
+.viewStyle:active{
+    transform: translateY(4px);
+    box-shadow:0 3px 5px 3px #999;
+}
+.viewStyle-clicked{
+    width:45%;
+    float:left;
+    margin-top:auto;
+    box-shadow:0 3px 5px 3px #999;
+}
     .title{
         line-height:3rem;
         float:left;
@@ -52,7 +76,6 @@ page-home {
   }
 
   .scroll-content {
-        overflow: hidden;
         padding-bottom: 0px;
     }
     ion-app.md [padding] .scroll-content {
@@ -95,13 +118,26 @@ page-home {
                 width: 100%;
                 margin: auto;
     }
+    button{
+        background-color:transparent;
+      color:#000;
+      height:3rem;
+    }
     .request-control{
         text-align: center;
         background: linear-gradient(transparent,map-get($colors,light))
     }
     .map-wrapper{
-        width:100%;
-        height:100%;
+        width:93%;
+        height: 70%;
+        text-align: center;
+        margin: auto;
+    }
+    .map-wrapper-no-show{
+        display: none;
+    }
+    .listView-no-show{
+        display:none;
     }
     }
     

@@ -35,7 +35,7 @@ import {Keyboard} from '@ionic-native/keyboard';
 import { Dialogs } from '@ionic-native/dialogs';
 import { OneSignal } from '@ionic-native/onesignal';
 import { BackgroundGeolocation, BackgroundGeolocationConfig } from '@ionic-native/background-geolocation';
-
+import { RequestPage } from './../pages/request/request'
 import {AutocompletePage} from '../pages/start/autocomplete';
 import { MetroServiceProvider } from '../providers/metro-service/metro-service';
 
@@ -65,7 +65,8 @@ import { MetroServiceProvider } from '../providers/metro-service/metro-service';
     ViewRequestListPage,
     ViewRequestedAllPage,
     NotifiedPage,
-    ChatPage
+    ChatPage,
+    RequestPage
 
   ],
   imports: [
@@ -93,7 +94,8 @@ import { MetroServiceProvider } from '../providers/metro-service/metro-service';
     ViewRequestListPage,
     ViewRequestedAllPage,
     NotifiedPage,
-    ChatPage
+    ChatPage,
+    RequestPage
     
     
   ],

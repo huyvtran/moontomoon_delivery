@@ -9,7 +9,10 @@
       <ion-toggle [(ngModel)]="isToggled" style="float:right"  (ionChange)="startTracking()"></ion-toggle>
    
       <button class="nav"  ion-button (click)="viewRequestedAll()">history</button>
-     
+      
+      <button class="refresh"  ion-button (click)="refresh()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
      <button class="nav" (click)="map.centerLocation()" ion-button >
       <ion-icon name="navigate" ></ion-icon>
     </button>
@@ -19,10 +22,91 @@
 
 </ion-header>
 
-<ion-content scroll="false" class="home">
+<ion-content class="home">
+    <ion-list radio-group (ionChange)="kmChanged()" [(ngModel)]="distanceSetting">
+        <div class="radio_header">
+            <label>검색 원하는 거리를 선택해주세요</label>
+          </div>  
+          <div class="radio_content">
+              <ion-item class="km" >
+                  <ion-label>5km</ion-label>
+                  <ion-radio checked value="5000" ></ion-radio>
+              </ion-item>
+              <ion-item class="km" >
+                  <ion-label>10km</ion-label>
+                  <ion-radio  value="10000"></ion-radio>
+              </ion-item>
+              <ion-item class="km" >
+                  <ion-label>15km</ion-label>
+                  <ion-radio  value="15000"></ion-radio>
+              </ion-item>
+              <ion-item class="km">
+                  <ion-label>20km</ion-label>
+                  <ion-radio  value="20000"></ion-radio>
+              </ion-item>
+          </div>
+           
+    </ion-list>
+    <ion-list style="margin-bottom:0px;" radio-group (ionChange)="viewChanged()" [(ngModel)]="viewSetting">
+        <ion-item  >
+            <ion-card [ngClass]="viewStyle_map ? 'viewStyle' : 'viewStyle-clicked'" (click)="mapView()">
+                <ion-card-content >
+                   지도로보기
+                </ion-card-content>
+            </ion-card>
+            <ion-card [ngClass]="viewStyle_list ? 'viewStyle' : 'viewStyle-clicked'" (click)="listView()" >
+                <ion-card-content >
+                   리스트로 보기
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+    
+  <div [ngClass]="showheartIconRead ? 'map-wrapper' : 'map-wrapper-no-show'">
+    <map (sLat)="sLat($event)" (sLng)="sLng($event)" (eLat)="eLat($event)" (eLng)="eLng($event)" (startLocation)="startLocation($event)" (endLocation)="endLocation($event)" (starting)="starting($event)"  (ending)="ending($event)"(changed)="changed($event)"  (currentLoc)="currentLoc($event)"  (drag_second)="drag_second($event)" #map [refreshing]=refreshing  [distanceSetting]="distanceSetting"[changed2]="changed2" [isPickupRequested]="isPickupRequested"  [startLat]="startLat" [startLng]="startLng" [endLat]="endLat" [requested]="requested" [endLng]="endLng"></map>
+  </div>
+  <div [ngClass]="showheartIconRead ? 'listView-no-show' : 'listView'" >
+          <ion-list *ngIf="showOrNot;else notShow">
 
-  <div class="map-wrapper">
-    <map (sLat)="sLat($event)" (sLng)="sLng($event)" (eLat)="eLat($event)" (eLng)="eLng($event)" (startLocation)="startLocation($event)" (endLocation)="endLocation($event)" (starting)="starting($event)"  (ending)="ending($event)"  (drag_second)="drag_second($event)" #map [isPickupRequested]="isPickupRequested"  [startLat]="startLat" [startLng]="startLng" [endLat]="endLat" [requested]="requested" [endLng]="endLng"></map>
+              <p *ngFor="let item of result_date">{{item}}
+                  <ion-item  >
+                          <ion-card  *ngFor="let item2 of result" >
+                            <p *ngIf="item === item2.onlyDate">
+                              <ion-card-header >
+                              
+                              <div class="custom" style="margin-top:2px">
+                                  오더번호 : {{item2.orderNo}}
+                                  <button *ngIf="item2.status=='requested'" style="float:right" class="chat" ion-button (click)="requesting(item2)">신청하기</button> 
+                                </div>
+                              </ion-card-header>
+                               <ion-card-content>
+                              출발지:  {{item2.startPoint}} &nbsp; &nbsp; <br>
+                              도착지:  {{item2.endPoint}} &nbsp; &nbsp; <br>
+                              신청시간 {{item2.create_date}}<br>
+                              
+                              거리 : {{item2.distance}}<br>
+                              남긴말 : {{item2.request_text}}<br>
+                              배달품목 {{item2.type}}
+                              
+                              </ion-card-content>
+                            </p>
+                          </ion-card  >
+                        </ion-item>
+              </p>
+          </ion-list>
+          <ng-template #notShow>
+              <ion-list >
+                  <ion-item>
+                      <ion-card >
+                             <ion-card-content>
+                                정보가 없습니다.
+                            </ion-card-content>
+                        </ion-card  >
+                  </ion-item>
+                </ion-list>
+          </ng-template>
+         
+      
   </div>
   <!-- <div class="bottom request-control">
     <ion-row>

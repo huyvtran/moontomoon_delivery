@@ -11,6 +11,7 @@ import { GooglePlus } from '@ionic-native/google-plus';
 import { AngularFireModule} from 'angularfire2';
 import firebase from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { Subscription } from 'rxjs/Subscription';
 
 
 
@@ -25,6 +26,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
   templateUrl: 'login.html',
 })
 export class LoginPage implements OnInit {
+
+  thingToUnsubscribeFromLater: Subscription = new Subscription();
   windowRef:any;
   profile={} as Profile_User;
   user={} as User;
@@ -127,14 +130,11 @@ export class LoginPage implements OnInit {
             loading.dismiss();
             localStorage.setItem("uid",auth.uid);
             localStorage.setItem("tokenId",this.tokenId);
-            var count=0;
-            localStorage.setItem("id", res.email.split("@")[0]);
+            localStorage.setItem("email", res.email.split("@")[0]);
             localStorage.setItem("foto",res.imageUrl);
             this.items=this.afDatabase.list('profile/'+auth.uid, { preserveSnapshot: true })
-            this.items.subscribe(snapshots=>{
-              if(snapshots.length%6==0||snapshots.length%7==0){
-                this.navCtrl.setRoot(HomePage)
-              }
+            this.thingToUnsubscribeFromLater=this.items.subscribe(snapshots=>{
+              
               if(snapshots.length==0){
                 this.profile.first=false;
                 this.profile.id="null";
@@ -142,51 +142,38 @@ export class LoginPage implements OnInit {
                 this.profile.foto="null";
                 this.profile.notiId="";
                 this.profile.uid="";
+                this.thingToUnsubscribeFromLater.unsubscribe();
                 this.afDatabase.object('profile/'+auth.uid+'/').set(this.profile)
                 .then(() => {  this.navCtrl.setRoot(ProfilePage,{uid:auth.uid,tokenId:this.tokenId});   } ).catch((error)=> alert("err : "+error))
               }else{
-                // count++;
-                // if(snapshots.forEach(element=>{
-                //   if(element.key=="first"){
+                snapshots.forEach(ele=>{
+                  if(ele.key=="id"){
+                    if(ele.val()=="null"){
+                      this.checked=true;
+                      this.items.unsubscribe
+                      this.navCtrl.setRoot(ProfilePage,{uid:auth.uid,tokenId:this.tokenId})
+                    }else{
+                      this.checked=false;
+                      localStorage.setItem("id",ele.val())
+                      this.navCtrl.setRoot(HomePage);
+                    }
+                  }
+
+                  if(ele.key=="phone"){
                     
-                //     if(element.val()==true){
-                //         // let toast = this.toast.create({
-                //         //   message: '로그인되었습니다.',
-                //         //   duration: 1000,
-                //         //   position: 'middle'
-                //         // });
-                //           alert("logged in"+count)
-                          
-                         
-                //           this.navCtrl.setRoot(HomePage);
-                //           count=0;
-                //     }else{
-                //       alert("22element.val==false")
-                //     }
-                    
-                //   }
-                // }))
-                // if(this.checked){
-                 
+      
+                        
+                      localStorage.setItem("phone",ele.val())
+                  }
                   
-                // }else{
+
+                })
                 
-                // }
                 
               }
+            })
           })
-            
-            
-          })
-          
-          
-        }).catch(ns=>{
-          alert("fail"+ns);
         })
-    }).catch((error =>{
-      alert(error);
-    }))
+      })
+    }
   }
-
-  
-}
