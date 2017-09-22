@@ -6,9 +6,11 @@ import { Http,Headers ,RequestOptions} from '@angular/http';
 import { request } from './models/request';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { PickupCar } from './pickup-car/pickup-car';
+
+import {NavController, App} from "ionic-angular/index";
 import { CarProvider } from './../providers/car/car';
 import { PickupDirective } from './../pickup/pickup';
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit,Injectable, ViewChild,Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import {  LoadingController, ToastController,Platform,AlertController, ModalController, NavParams } from 'ionic-angular';
 import { AvailbleCarDirective } from './available-cars/available-cars';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -24,7 +26,9 @@ declare var google;
    entryComponents: [PickupDirective,AvailbleCarDirective,PickupCar],
      providers:[CarProvider,PickupDirective]
 })
+@Injectable()
 export class MapDirective implements OnInit,OnChanges  {
+    locationSending:any;
     @Input() changed2:boolean;
     @Input() isPickupRequested:any;
     @Input() startstn:string;
@@ -45,7 +49,7 @@ export class MapDirective implements OnInit,OnChanges  {
 
     @Output() currentLoc : EventEmitter<any>=new EventEmitter();
     thingToUnsubscribeFromLater: Subscription = new Subscription();
-    
+    @Output() currentNumber : EventEmitter<any>=new EventEmitter();
     count:number=0;
     count2:number=0;
     public map:any;
@@ -85,12 +89,15 @@ export class MapDirective implements OnInit,OnChanges  {
      check_true:boolean;
      count3:number=0;
      c:number=0;
-    constructor( public toast:ToastController, public loading:LoadingController,public platform:Platform, public http:Http, 
+     public navCtrl:NavController;
+
+    constructor( public toast:ToastController,private app:App,public loading:LoadingController,public platform:Platform, public http:Http, 
         private dialog:AlertController,public geo:Geolocation,
         public afDatabase:AngularFireDatabase,public modal:ModalController
         
 
   ){
+    this.navCtrl = app.getActiveNav();
 //      
 // 
     this.check_true=false;
@@ -128,6 +135,23 @@ export class MapDirective implements OnInit,OnChanges  {
 
 })
 .endInit();
+    }else if(this.platform.is('ios')){
+        window["plugins"].OneSignal
+        .startInit("2192c71b-49b9-4fe1-bee8-25617d89b4e8", "916589339698")
+        .handleNotificationOpened((jsonData)=> {
+            let value=jsonData.notification.payload.additionalData
+            if(value.welcome){
+                let modal = this.modal.create(NotifiedPage,{name:value.name});
+                let me = this;
+                modal.onDidDismiss(data => {
+                    this.fetchingExpress=true;
+                });
+                modal.present();
+            }else{
+                alert("nope");
+            }
+        })
+            .endInit();
     }else{
         // let modal = this.modal.create(NotifiedPage);
         // let me = this;
@@ -184,7 +208,9 @@ export class MapDirective implements OnInit,OnChanges  {
                     endLat:element.val().endLat ,lat:element.val().startLat,lng:element.val().startLng,
                     create_date:element.val().create_date, startPoint:element.val().startPoint,
                     endPoint:element.val().endPoint,status:element.val().status,
-                     weight:element.val().freight_weight,size:element.val().frieght_size,content:element.val().freight_content,request:element.val().request_text})
+                     desiredTime:element.val().desired_time,startDetail:element.val().startDetail,
+                     endDetail:element.val().endDetail,
+                     request:element.val().request_text,distance:element.val().distance})
                             console.log(this.requestedRoute);
             }
             
@@ -226,6 +252,8 @@ export class MapDirective implements OnInit,OnChanges  {
             
             }
         console.log("marker length "+this.markerStart.length);
+        let currentNumber=this.markerStart.length;
+        this.currentNumber.next(currentNumber)
         console.log(this.markerStart);
         for(let k = 0; k < this.markerStart.length; k++){
             this.markerStart[k].addListener('click', () => {
@@ -242,6 +270,11 @@ export class MapDirective implements OnInit,OnChanges  {
             var endLng=this.requestedRoute[k].endLng;
             var create_date=this.requestedRoute[k].create_date;
             var tokenId=this.requestedRoute[k].tokenId;
+            var distance=this.requestedRoute[k].distance;
+            var startDetail=this.requestedRoute[k].startDetail;
+            var endDetail=this.requestedRoute[k].endDetail;
+            var desiredTime=this.requestedRoute[k].desiredTime;
+
             if(tokenId==undefined){
                 tokenId="abcde"
             }
@@ -252,6 +285,7 @@ export class MapDirective implements OnInit,OnChanges  {
             var content=this.requestedRoute[k].content;
             var request_message=this.requestedRoute[k].request;
             var order=this.requestedRoute[k].order;
+
             this.request.create_date=create_date;
             this.request.startPoint=startPoint;
             this.request.endPoint=endPoint;
@@ -265,20 +299,16 @@ export class MapDirective implements OnInit,OnChanges  {
             this.request.onlyDate=create_date.substring(0,10);
             this.request.deliveryGuy="not defined yet";
             this.request.deliveryGuy=this.userId;
-
-            this.request.uid=this.uid;
+            this.request.distance=distance;
             this.request.tokenId="tokenId";
             this.request.type=this.requestedRoute[k].type;
             this.request.request_text=request_message;
+            this.request.startDetail=startDetail;
+            this.request.endDetail=endDetail;
+            this.request.desired_time=desiredTime;
             console.log(this.request);
-            let modal = this.modal.create(RequestPage,{object:this.request});
-            let me = this;
-            modal.onDidDismiss(data => {
-                alert(k);
-                
-            });
-            modal.present();
-           
+            this.navCtrl.push(RequestPage,{object:this.request})
+            
 
                 })
             }
@@ -482,25 +512,22 @@ ngOnChanges() {
     //             // }
     //     }))(j);
     // }
-        if(this.centerMarker!=undefined){
-            if(this.distanceSetting==undefined){
+            
+            if(this.circleMarker!=undefined){
+                console.log("radius : "+this.distanceSetting);
+                console.log("thissssss");
+                console.log(this.requestedRoute)
+                this.distanceSetting=parseInt(this.distanceSetting);
+                this.circleMarker.setMap(null);
+                  this.circleMarker = new google.maps.Circle({
+                    map: this.map,
+                    radius: this.distanceSetting,    // 10 miles in metres
+                    fillColor: 'green'
+                  });
+                  this.circleMarker.bindTo('center', this.centerMarker, 'position');
+        
             }
-
-            console.log("radius : "+this.distanceSetting);
-            console.log("thissssss");
-            console.log(this.requestedRoute)
-            this.distanceSetting=parseInt(this.distanceSetting);
-            this.circleMarker.setMap(null);
-              this.circleMarker = new google.maps.Circle({
-                map: this.map,
-                radius: this.distanceSetting,    // 10 miles in metres
-                fillColor: 'green'
-              });
-              this.circleMarker.bindTo('center', this.centerMarker, 'position');
-                
-    
-        }else{
-        }
+           
         
     if(this.requested){
         this.count=0;
@@ -513,12 +540,14 @@ ngOnInit(){
     
     this.map=this.createMap();
     this.getCurrentLocation2().subscribe(currentLocation=>{
+        alert(currentLocation);
     });
 
 }
 centerLocation2(){
     this.isMapIdle=false;
     this.getCurrentLocation2().subscribe(currentLocation=>{
+        alert(currentLocation);
      this.map.panTo(currentLocation);    
         
     });
@@ -553,23 +582,27 @@ this.centerLocation(location);
         return map;
     }
         getCurrentLocation2(){
+          
+            var loca
             let loading=this.loading.create({
-              content:'위치정보를 받아오는 중…'
+              content:'위치정보를 받아오는 중23…'
             })
             loading.present().then(()=>{
             })
-            let options={timeout:5000,maximumAge :5000,enableHighAccuracy:true}
+            let options={timeout:6500,maximumAge :3000,enableHighAccuracy:true}
             let locationObs=Observable.create(observable =>{
+                
               this.geo.getCurrentPosition(options).then(resp=>{
               let lat=resp.coords.latitude;
               let lng=resp.coords.longitude;
               this.myCurrentlat=lat
               this.myCurrentlng=lng
-            //   this.starting.next(lat);
-            //   this.ending.next(lng);
+              //   this.starting.next(lat);
+              //   this.ending.next(lng);
               let location=new google.maps.LatLng(lat,lng);
+              this.locationSending=location
               this.currentLoc.next(location);
-
+                
               this.map.panTo(location);
               this.centerMarker=new google.maps.Marker({
                 map: this.map,
@@ -586,37 +619,16 @@ this.centerLocation(location);
                 
               loading.dismiss();
             }).catch((error =>{
-                if(error.code==3){
-                    this.geo.getCurrentPosition(options).then(resp=>{
-                        let lat=resp.coords.latitude;
-                        let lng=resp.coords.longitude;
-                        this.myCurrentlat=lat
-                        this.myCurrentlng=lng
-                      //   this.starting.next(lat);
-                      //   this.ending.next(lng);
-                        let location=new google.maps.LatLng(lat,lng);
-                        this.map.panTo(location);
-                        this.centerMarker=new google.maps.Marker({
-                          map: this.map,
-                          icon:'',
-                          position: new google.maps.LatLng(lat, lng),
-                          title: 'Some location'
-                        })
-                        this.circleMarker = new google.maps.Circle({
-                          map: this.map,
-                          radius: 5000,    // 10 miles in metres
-                          fillColor: 'green'
-                        });
-                          this.circleMarker.bindTo('center', this.centerMarker, 'position');
-                          
-                        loading.dismiss();
-                      })
-                }
                 loading.dismiss();
+                if(error.code==3){
+                   
+                }
             
             }))
             
             })
+            
+    
             return locationObs
           }
 }

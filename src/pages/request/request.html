@@ -1,43 +1,95 @@
+<ion-header>
+        <ion-navbar>
+            <div class="title">
+              지하철택배(배달원)
+            </div>
+          </ion-navbar>
+    </ion-header>
 
-<ion-content class="main-view" padding>
-  
-<div class="modal_content">
+
+
+
     
-    <div class="header">배달 상세 내용</div>
+<ion-content >
+  
+    
+    <div class="header_title">배달 상세 내용</div>
     <div class="content_main">
       
-      <div class="info">
-          <div class="orderno">
-              {{orderNo}}
-          </div>
-          <div class="start">
-                  출발지점 : {{start}} <button  style="float:right" class="btn" ion-button (click)="change(start)">변경</button>
-          </div>
-          <div class="end">
-                  도착지점 : {{end}} <button  style="float:right" class="btn" ion-button (click)="change(end)">변경</button> 
-          </div>
-      </div> 
-      <div class="freight">
-        <div class="time">
-              <ion-list class="time_list" >
-                      <div class="radio_header">
-                          <label>희망 배송 시간</label>
-                        </div>  
-                        <div class="radio_content">
-                            <ion-item class="desired_time" >
-                                <ion-label>최대한 빨리</ion-label>
-                            </ion-item>
+            <div class="info">
+                    
+                    <div    class="label">
+                                배송정보
+                </div> 
+               
+                
+            <div class="flag_info_show">
+                    <div class="start">
+                        <div class="label">
+                                출발지점
+
                         </div>
-                  </ion-list>
-        </div>
+                        
+                        <div class="label_content">
+
+                                <div class="start_address">
+                                        {{start}}
+                                </div>
+                                <!-- <div class="info_button">
+                                        <button  style="float:right" class="btn" ion-button (click)="add(start)">리스트에<br> 추가</button>
+                                </div> -->
+                                <div class="start_address">
+                                        {{startDetail}}
+                                </div>
+                        </div>
+                            
+                        
+                    </div>
+                    <div class="end">
+                        <div class="label">
+                                도착지점
+                        </div>
+                        <div class="label_content">
+                            <div class="end_address">
+                               {{end}}
+                            </div>
+                            <!-- <div class="info_button">
+                                    <button  style="float:right" class="btn" ion-button (click)="add(end)">리스트에<br> 추가</button> 
+                            </div> -->
+                            <div class="end_address">
+                                    {{endDetail}}
+                            </div>
+                        </div>
+                           
+                    </div>
+                    <div style="margin-bottom:10px; margin-left:15px; width:80%;" class="cellphone">
+                            <ion-input type="number" placeholder="휴대전화번호를 입력해주세요" class="input" [ngModel]="cellphone"></ion-input>
+                    </div>
+            </div>
+               
+            <div class="flag_info_noshow" *ngIf="!info">
+            </div>
+    </div>
+    <div class="time">
+            <ion-list class="time_list" >
+                    <div class="radio_header">
+                        <label>희망 배송 시간</label>
+                      </div>  
+                      <div class="radio_content">
+                          <ion-item class="desired_time" >
+                              <ion-label>{{desiredTime}}</ion-label>
+                          </ion-item>
+                      </div>
+                </ion-list>
+      </div>
+      <div class="freight">
+        
         <div class="freight_info">
               <div class="radio_header">
                   <label>배송품의 정보를 입력하세요</label>
               </div> 
               <div class="type_image">
-                  <div class=img_animal>
-                      <img src="{{image}}" />
-                  </div>
+                  {{type}}
                   
               </div>
               <div class="content_text">
@@ -84,5 +136,4 @@
       <button class="confirm" ion-button (click)="cancel()">취소</button>
     </div>
  
-</div>
 </ion-content>

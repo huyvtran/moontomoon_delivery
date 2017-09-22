@@ -4,15 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <div class="title">
-      지하철택배(배달원)
+      지하철택배<br>(배달원)
     </div>
       <ion-toggle [(ngModel)]="isToggled" style="float:right"  (ionChange)="startTracking()"></ion-toggle>
    
       <button class="nav"  ion-button (click)="viewRequestedAll()">history</button>
       
-      <button class="refresh"  ion-button (click)="refresh()">
-        <ion-icon name="refresh"></ion-icon>
-      </button>
      <button class="nav" (click)="map.centerLocation()" ion-button >
       <ion-icon name="navigate" ></ion-icon>
     </button>
@@ -47,7 +44,7 @@
           </div>
            
     </ion-list>
-    <ion-list style="margin-bottom:0px;" radio-group (ionChange)="viewChanged()" [(ngModel)]="viewSetting">
+    <ion-list style="margin-bottom:0px;" radio-group  [(ngModel)]="viewSetting">
         <ion-item  >
             <ion-card [ngClass]="viewStyle_map ? 'viewStyle' : 'viewStyle-clicked'" (click)="mapView()">
                 <ion-card-content >
@@ -56,43 +53,49 @@
             </ion-card>
             <ion-card [ngClass]="viewStyle_list ? 'viewStyle' : 'viewStyle-clicked'" (click)="listView()" >
                 <ion-card-content >
-                   리스트로 보기
+                   리스트로 보기 {{cNumber}}
                 </ion-card-content>
             </ion-card>
         </ion-item>
     </ion-list>
     
   <div [ngClass]="showheartIconRead ? 'map-wrapper' : 'map-wrapper-no-show'">
-    <map (sLat)="sLat($event)" (sLng)="sLng($event)" (eLat)="eLat($event)" (eLng)="eLng($event)" (startLocation)="startLocation($event)" (endLocation)="endLocation($event)" (starting)="starting($event)"  (ending)="ending($event)"(changed)="changed($event)"  (currentLoc)="currentLoc($event)"  (drag_second)="drag_second($event)" #map [refreshing]=refreshing  [distanceSetting]="distanceSetting"[changed2]="changed2" [isPickupRequested]="isPickupRequested"  [startLat]="startLat" [startLng]="startLng" [endLat]="endLat" [requested]="requested" [endLng]="endLng"></map>
+    <map (sLat)="sLat($event)" (sLng)="sLng($event)" (eLat)="eLat($event)" (eLng)="eLng($event)" (startLocation)="startLocation($event)" (endLocation)="endLocation($event)" (starting)="starting($event)" (currentNumber)="currentNumber($event)"  (ending)="ending($event)"(changed)="changed($event)"  (currentLoc)="currentLoc($event)"  (drag_second)="drag_second($event)" #map [refreshing]=refreshing  [distanceSetting]="distanceSetting"[changed2]="changed2" [isPickupRequested]="isPickupRequested"  [startLat]="startLat" [startLng]="startLng" [endLat]="endLat" [requested]="requested" [endLng]="endLng"></map>
   </div>
   <div [ngClass]="showheartIconRead ? 'listView-no-show' : 'listView'" >
           <ion-list *ngIf="showOrNot;else notShow">
 
+
               <p *ngFor="let item of result_date">{{item}}
                   <ion-item  >
-                          <ion-card  *ngFor="let item2 of result" >
-                            <p *ngIf="item === item2.onlyDate">
-                              <ion-card-header >
-                              
-                              <div class="custom" style="margin-top:2px">
-                                  오더번호 : {{item2.orderNo}}
-                                  <button *ngIf="item2.status=='requested'" style="float:right" class="chat" ion-button (click)="requesting(item2)">신청하기</button> 
-                                </div>
-                              </ion-card-header>
-                               <ion-card-content>
-                              출발지:  {{item2.startPoint}} &nbsp; &nbsp; <br>
-                              도착지:  {{item2.endPoint}} &nbsp; &nbsp; <br>
-                              신청시간 {{item2.create_date}}<br>
-                              
-                              거리 : {{item2.distance}}<br>
-                              남긴말 : {{item2.request_text}}<br>
-                              배달품목 {{item2.type}}
-                              
-                              </ion-card-content>
-                            </p>
-                          </ion-card  >
+                      <div class="list" *ngFor="let item2 of result">
+                              <p *ngIf="item === item2.onlyDate">
+                                      <ion-card   >
+                                          <ion-card-header >
+                                              <div class="custom" style="margin-top:2px">
+                                                  오더번호 : {{item2.orderNo}}
+                                                  <button *ngIf="item2.status=='requested'" style="float:right" class="chat" ion-button (click)="requesting(item2)">신청하기</button> 
+                                                </div>
+                                              </ion-card-header>
+                                               <ion-card-content>
+                                              출발지:  {{item2.startPoint}} &nbsp; &nbsp; <br>
+                                              도착지:  {{item2.endPoint}} &nbsp; &nbsp; <br>
+                                              신청시간 {{item2.create_date}}<br>
+                                              
+                                              거리 : {{item2.distance}}<br>
+                                              남긴말 : {{item2.request_text}}<br>
+                                              배달품목 {{item2.type}}
+                                              
+                                              </ion-card-content>
+                                   
+                                  </ion-card  >
+                              </p>
+                      </div>
+                          
                         </ion-item>
               </p>
+
+
           </ion-list>
           <ng-template #notShow>
               <ion-list >
@@ -137,7 +140,7 @@
   </div> -->
 </ion-content>
 
-<ion-menu [content]="content">
+<ion-menu class="ionmenu" [content]="content">
   <ion-header>
     <ion-toolbar>
       <ion-title class="title_menu">Menu</ion-title>
@@ -149,6 +152,8 @@
           <div class="profile">
               <img class="img" src="{{imageUrl}}"/>
               <p>{{userId}}</p>
+              <p>{{phone}}</p>
+              <p>{{name}}</p>
           </div>
           
             <button menuClose ion-item *ngFor="let p of pages" [class.activeHighlight]="checkActive(p)" (click)="openPage(p)">{{p.title}}</button>

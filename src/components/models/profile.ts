@@ -5,4 +5,8 @@ export interface Profile_User{
     first:boolean;
     notiId:string;
     uid:string;
+    type:string;
+    email:string
+    name:string;
+    phone:string
 }

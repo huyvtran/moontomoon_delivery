@@ -22,6 +22,9 @@
       <ion-item>
         <ion-label floating>USER ID</ion-label>
         <ion-input [(ngModel)]="profile.id"></ion-input>
+<hr>
+        <ion-label floating>본명을 입력해주세요</ion-label>
+        <ion-input [(ngModel)]="profile.name"></ion-input>
         
       </ion-item>
        <button ion-button clear block (click)="createProfile()"> 다음 </button>

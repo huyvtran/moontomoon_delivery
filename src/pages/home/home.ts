@@ -1,11 +1,8 @@
 import { GooglePlus } from '@ionic-native/google-plus';
-import { MetroServiceProvider } from './../../providers/metro-service/metro-service';
 import { ViewRequestListPage } from './../view-request-list/view-request-list';
 import { ViewRequestedAllPage } from './../view-requested-all/view-requested-all';
 import { request } from './../../components/models/request';
 import { LoginPage } from './../login/login';
-import { EndPage } from './../end/end';
-import { StartPage } from './../start/start';
 import { Http,Headers ,RequestOptions} from '@angular/http';
 import { Location } from './../../components/models/location';
 import { MapDirective } from './../../components/map';
@@ -15,7 +12,6 @@ import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { NavController, LoadingController, NavParams, ModalController, Platform ,ToastController} from 'ionic-angular';
 import {Keyboard} from '@ionic-native/keyboard';
 import firebase from 'firebase';
-import {AutocompletePage} from './../start/autocomplete';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { OneSignal } from '@ionic-native/onesignal';
 import { BackgroundGeolocation, BackgroundGeolocationConfig } from '@ionic-native/background-geolocation';
@@ -82,14 +78,47 @@ export class HomePage implements OnInit,OnChanges  {
   public lng: number = 0;
   totalOrder=[];
   imageUrl:string;
+  phone:string;
   delivering:boolean=false;
   result_date=[];
   changed2:boolean=false;
+  cNumber:any;
+  name:any;
   constructor(public toast: ToastController,public m : MapDirective, public navCtrl: NavController,public navParam:NavParams ,public mapDirective:MapDirective, public modalCtrl:ModalController, public loading:LoadingController,  
     private geo:Geolocation,private afDatabase:AngularFireDatabase,public afAuth : AngularFireAuth,private googleplus:GooglePlus,public t:TimeService
-  ,public metro: MetroServiceProvider,private oneSignal: OneSignal, public platform:Platform,private backgroundGeolocation: BackgroundGeolocation,public http:Http) {
+  ,private oneSignal: OneSignal, public platform:Platform,private backgroundGeolocation: BackgroundGeolocation,public http:Http) {
     var id=localStorage.getItem("id");
     this.imageUrl=localStorage.getItem("foto");
+    this.name=localStorage.getItem("name");
+    this.phone=localStorage.getItem("phone");
+    var obj=this.afDatabase.list("/requestedList/requestedAll", { preserveSnapshot: true });
+    var countstart=0;
+    obj.subscribe(snapshots=>{
+      snapshots.forEach((ele)=>{
+        console.log(ele.key);
+        console.log("hai")
+        if(ele.val().deliveryGuy==this.userId){
+          if(ele.val().status!="finished"){
+            console.log(ele.val().status);
+            countstart++;
+            
+            return;
+          }
+        }
+      
+      })
+
+      console.log("ccc");
+      console.log(countstart)
+      if(countstart>0){
+        
+        setTimeout(()=>{
+          this.isToggled=true;
+        },200);
+      }
+    })
+    
+    
     if(id!=undefined||id!=null){
     this.userId=id;
     }else{
@@ -146,11 +175,17 @@ export class HomePage implements OnInit,OnChanges  {
   }
    openPage(page){
     if(page.attr=="Logout"){
+      
       if(this.platform.is("android")){
-
+        alert("logout")
+        this.googleplus.disconnect();
         this.googleplus.logout();
+
+        localStorage.setItem("googleLoggedIn","false")
         this.navCtrl.setRoot(LoginPage);
       }else{
+        this.googleplus.disconnect()
+        this.navCtrl.setRoot(LoginPage);
         alert("not web")
       }
     }else{
@@ -290,27 +325,29 @@ export class HomePage implements OnInit,OnChanges  {
   }
 
   
-  viewChanged(){
-    console.log(this.viewSetting)
-  }
+
   currentLoc(value){
-    console.log("currentLoc");
-    console.log(value.lat());
-    this.myCurrentlat=value.lat();
-    this.myCurrentlng=value.lng();
-    console.log(value.lng());
+
+    console.log("currentLoc22");
+    console.log(value)
+    if(value!=undefined){
+      this.myCurrentlat=value.lat();
+      this.myCurrentlng=value.lng();
+      console.log(value.lng());
+    }
+    
   }
   kmChanged(){
     console.log("kmChanged")
     console.log(this.distanceSetting);
-   
+    this.result=[];
+    this.result_date=[];
     var requestList=this.afDatabase.list('/requestedList/requested/', { preserveSnapshot: true })
     console.log("kmChanged????????????????????????????")
     console.log(this.items);
     requestList.subscribe(snapshots=>{
     console.log(snapshots);
-    this.result=[];
-    this.result_date=[];
+    
     
     snapshots.forEach(element => {
         console.log("!!!!!")
@@ -352,7 +389,10 @@ export class HomePage implements OnInit,OnChanges  {
    })
    
   }
-  
+  currentNumber(value){
+    
+    this.cNumber=value;
+  }
   requesting(itemObject){
     this.request=itemObject;
     this.request.status="assigned";
@@ -374,9 +414,10 @@ export class HomePage implements OnInit,OnChanges  {
     let todayNoTime= yyyy+" "+mm+" "+dd;
 
     var notificationObj = {title:{en:"배달원 지정안내"}, contents: {en:"칙칙폭폭 배달원이 지정되었습니다.\n 확인해보세요"},
-    "data": {"status": "assigned", "id":this.userId,"foto":this.imageUrl,"time": todaywithTime,"distance":itemObject.distance},
+    "data": {"status": "assigned", "id":this.userId,"foto":this.imageUrl,"time": todaywithTime,"distance":itemObject.distance,"name":this.name},
     include_player_ids: [itemObject.tokenId]};
     if(this.platform.is('android')){
+      alert("android")
       window["plugins"].OneSignal.postNotification(notificationObj,
           (successResponse)=> {
               

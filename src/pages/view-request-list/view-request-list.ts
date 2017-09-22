@@ -15,6 +15,7 @@ import { request } from './../../components/models/request';
   templateUrl: 'view-request-list.html',
 })
 export class ViewRequestListPage {
+  viewStyle_map=true;
   items:any;
   userId:string;
   shown:any;
@@ -47,32 +48,18 @@ export class ViewRequestListPage {
           this.result.push(element.val());
           this.result_date=Array.from(new Set(this.result_date))
         }
-  //        if(element.val())
-  //       var keysFiltered = Object.keys(element.val()).filter(function(item){return !( element.val()[item] == undefined)});
-   
-  // var valuesFiltered = keysFiltered.map((item)=> {
-  //   if(element.val()[item].user==this.userId){
-  //     console.log(item);
-  //     console.log(element.val()[item]);
-     
-  //     this.result_date.push(element.val()[item].onlyDate)
-  //     console.log("rrresult")
-  //     console.log(this.result_date);
-  //     this.result.push(element.val()[item])
-  //       console.log(this.result);
-  //       this.result_date=Array.from(new Set(this.result_date))
-  //       console.log(this.result_date);
-  //   }
-   
-  // });
+ 
   
      })
+     console.log(this.result);
+
     })
   }
   chat(itemObject){
     this.navCtrl.push(ChatPage,{item:itemObject})
   }
   confirm(itemObject){
+    
     //배달완료 버튼을 눌렀을때, 
 
     this.request=itemObject;

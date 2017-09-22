@@ -9,6 +9,9 @@ page-chat {
     {
         font-family: 'Open Sans', sans-serif;
         }
+    .direct-chat-text:hover{
+        cursor: pointer;
+    }
     .popup-box {
        background-color: #ffffff;
         border: 1px solid #b0b0b0;
@@ -96,7 +99,7 @@ page-chat {
         margin: 7px;
         padding: 5px !important;
          border: medium none;
-        width: 80% !important;
+        width: 60% !important;
         float:left;
     }
     .popup-messages-footer {
@@ -125,7 +128,7 @@ page-chat {
     
     .popup-box .popup-messages {
         background: #3f9684 none repeat scroll 0 0;
-        height: 75%;
+        height: 99%;
         overflow: auto;
     }
     .direct-chat-messages {

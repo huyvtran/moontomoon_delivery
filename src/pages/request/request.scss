@@ -1,211 +1,310 @@
 page-request {
-        .desired_time{
-            width:50%;
-            float:left;
+    .desired_time{
+        width:50%;
+        float:left;
+    }
+    .header_title{
+        text-align: center;
+        font-size:2rem;
+    }
+    .time{
+        display:flow-root;
+        .time_list{
+            height: 100%;
         }
-        .time{
-            height: 40%;
-            .time_list{
-                height: 100%;
-            }
-            .radio_header{
-                text-align: center;
-                margin-top: 5px;
-            }
-            .radio_content{
-                height: 100%;
-            }
-        }
-        .freight_info{
-            height: 70%;
-            .radio_header{
-                text-align:center;
-            }
-            .type_image{
-                width: 90%;
-                height: 50%;
-                text-align: center;
-                margin: auto;
-                margin-left: auto;
-                margin-right: auto;
-                // .viewStyle{
-    //     width:40%;
-    //     float:left;
-    //     margin-top:auto;
-    //     box-shadow:0 3px 9px 3px #999;}
-    // .viewStyle:active{
-    //     transform: translateY(4px);
-    //     box-shadow:0 3px 5px 3px #999;
-    // }
-    // .viewStyle-clicked{
-    //     width:45%;
-    //     float:left;
-    //     margin-top:auto;
-    //     box-shadow:0 3px 5px 3px #999;
-    // }
-                .img_animal{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 1px 1px 1px #999;
-                }
-                .img_animal:active{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    transform: translateY(4px);
-                    box-shadow:0 3px 5px 3px #999;
-                }
-                .img_animal-clicked{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 3px 5px 3px #999;
-                }
-                .img_normal{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 1px 1px 1px #999;
-                }
-                .img_normal:active{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 3px 5px 3px #999;
-                }
-                .img_normal-clicked{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 3px 5px 3px #999;
-                }
-                .img_heavy{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 1px 1px 1px #999;
-                }
-                .img_heavy:active{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 3px 5px 3px #999;
-                }
-                .img_heavy-clicked{
-                    height: 80%;
-                    width:33%;
-                    float:left;
-                    box-shadow:0 3px 5px 3px #999;
-                }
-    
-            }
-        }
-        .button-md{
-            height: 1.8rem;
-           font-size: 1.5rem;
-       }
-        .image{
-            width: 35%;
-            height: 75%;
-            border: solid 1px;
-            float: left;
-        }
-        .content_main{
-          width: 100%;
-          height: 80%;
-        }
-        img{
-            width:100%;
-            height:100%;
-        }
-        .content{
-            height: 90%;
-            width:100%;
-        }
-        .content_text{
-            width:100%;
-            height:30%;
-        }
-        .header{
+        .radio_header{
             text-align: center;
-            font-size: 3rem;
-            height: 10%;
-            vertical-align: middle;
+            margin-top: 5px;
         }
-        .footer{
-            .confirm{
-                width: 49%;
-                float: left;
-                height: 3.5rem;
-                font-size: 2rem;
-            }
-            
+        .radio_content{
+            height: 100%;
         }
-        .info{
-            width: 100%;
-            height: 20%;
-            .orderno{
-                height: 33%;
+    }
+    .final_price{
+        text-align: center;
+        font-size: 3rem;
+    }
+    .freight_info{
+        height: 70%;
+        .radio_header{
+            text-align:center;
+        }
+        .type_image{
+            width: 90%;
+            height: 50%;
+            text-align: center;
+            margin: auto;
+            margin-left: auto;
+            margin-right: auto;
+            // .viewStyle{
+//     width:40%;
+//     float:left;
+//     margin-top:auto;
+//     box-shadow:0 3px 9px 3px #999;}
+// .viewStyle:active{
+//     transform: translateY(4px);
+//     box-shadow:0 3px 5px 3px #999;
+// }
+// .viewStyle-clicked{
+//     width:45%;
+//     float:left;
+//     margin-top:auto;
+//     box-shadow:0 3px 5px 3px #999;
+// }
+            .img_animal{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 1px 1px 1px #999;
             }
-            .start{
-                height:33%;
+            .img_animal:active{
+                height: 80%;
+                width:33%;
+                float:left;
+                transform: translateY(4px);
+                box-shadow:0 3px 5px 3px #999;
             }
-            .end{
-                height: 33%;
+            .img_animal-clicked{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 3px 5px 3px #999;
             }
+            .img_normal{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 1px 1px 1px #999;
+            }
+            .img_normal:active{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 3px 5px 3px #999;
+            }
+            .img_normal-clicked{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 3px 5px 3px #999;
+            }
+            .img_heavy{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 1px 1px 1px #999;
+            }
+            .img_heavy:active{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 3px 5px 3px #999;
+            }
+            .img_heavy-clicked{
+                height: 80%;
+                width:33%;
+                float:left;
+                box-shadow:0 3px 5px 3px #999;
+            }
+
+        }
+    }
+    .button-md{
+        background-color: transparent;
+        border: solid 1px;
+        color: black;
+        height: 1.6rem;
+   }
+   .button-ios{
+    background-color: transparent;
+    border: solid 1px;
+    color: black;
+    height: 1.6rem;
+   }
+    .image{
+        width: 35%;
+        height: 75%;
+        border: solid 1px;
+        float: left;
+    }
+    .content_main{
+      width: 100%;
+      height: auto;
+    }
+    
+    .label{
+        font-size: 2.2rem;
+        font-family: unset;
+        margin-bottom: 1rem;
+    }
+    
+    .content{
+        height: 100%;
+        width:100%;
+    }
+    .content_text{
+        width:80%;
+        height:30%;
+        margin-left:10%;
+    }
+    
+    .iconic{
+        float: right;
+        margin-right: 10%;
+        color:red;
+    }
+    .iconic:active{
+        color:blue;
+    }
+    .point{
+        border: solid 1px;
+        width: 100%;
+        text-align: center;
+        margin-bottom:0.8rem;
+    }
+    .flag_payment_info_noshow{
+        display: none;
+    }
+    .footer{
+        .confirm{
+            width: 90%;
+            left: 5%;
+            top:15%;
+            float: left;
+            height: 3.5rem;
+            font-size: 2rem;
         }
         
-        .freight{
-            height:70%;
+    }
+    .info{
+        background-color: aliceblue;
+        width: 100%;
+        /* position: relative; */
+        height: 35%;
+        .label_content{
+            float: left;
+            width: 95%;
+            margin-bottom:1rem;
+            margin-left: 1.5rem;
         }
         
-        
-        
-          .main-view{
-              background: transparent;
-            }
-            .title_title{
-              line-height:3rem;
-              float:left;
-              padding:0;
-              width: 25%;
-              margin-left:20px;
-          }
-          .title{
-              line-height:3rem;
-              float:left;
-              
-              padding:0;
-              width: 25%;
-          }
-          button.nav{
-              background-color:transparent;
-            color:#000;
+        .start_address{
+            width: 90%;
+            float: left;
+            margin-bottom:0.5rem;
+        }
+        .end_address{
+            width:90%;
             float:left;
-          }
-            .modal_content {
-              position: absolute;
-              top: calc(38% - (50%/2));
-              left: 0;
-              right: 0;
-              width: 90%;
-              height: 87%;
-              padding: 10px;
-              z-index: 100;
-              margin: 0 auto;
-              padding: 10px;
-              color: #333;
-              background: #e8e8e8;
-              background: -moz-linear-gradient(top, #fff 0%, #e8e8e8 100%);
-              background: -webkit-linear-gradient(top, #fff 0%, #e8e8e8 100%);
-              background: linear-gradient(to bottom, #fff 0%, #e8e8e8 100%);
-              border-radius: 5px;
-              box-shadow: 0 2px 3px rgba(51, 51, 51, .35);
-              box-sizing: border-box;
-              -moz-box-sizing: border-box;
-              -webkit-box-sizing: border-box;
-              overflow: hidden;
+            margin-bottom:0.5rem;
+        }
+        .item-block {
+            min-height: 0;
+        }
+        .info_button{
+            float: right;
+            height: 60px;
+            width: 20%;
+            button{
+                float: right;
+                transition: none;
+                height: 100%;
+                width: 90%;
             }
+        }
+        .flag_info_show{
+            width:100%;
+            display:flow-root;
+        }
+        .flag_info_noshow{
+            display: none;
+        }
+        .start{
+            height: 100px;
+            font-size: 1.6rem;
+            /* height: 50%; */
+            margin-bottom: 1rem;
+        }
+        .input{
+            width: 90%;
+            margin-bottom:0.5rem;
+            float: left;
+            background-color: white;
+        }
+        .end{
+            height: auto;
+            font-size: 1.6rem;
+            /* height: 50%; */
+            margin-bottom: 1rem;
+        }
+    }
+    .image_container{
+        height: 10rem;
+        left: 30%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%;
+    }
+    .details,
+    .show,
+    .hide:target {
+      display: none;
+    }
+    .hide:target + .show,
+    .hide:target ~ .details {
+      display: block;
+    }
+    .freight{
+        background-color: whitesmoke;
+    }
+    .payment{
+        background-color:bisque;
+    }
+    .payment_info{
+        border: solid 1px;
+    }
+    .discount{
+        background-color:aliceblue;
+    }
+    .flag_payment_info_show{
+        text-align: left;
+    }
+    .input_point{
+        background-color: white;
+        width: 50%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .payment_mean{
+    }
+    
+    
+      .main-view{
+          background: transparent;
+        }
+        .title_title{
+          line-height:3rem;
+          float:left;
+          padding:0;
+          width: 25%;
+          margin-left:20px;
+      }
+      .title{
+          line-height:3rem;
+          float:left;
+          
+          padding:0;
+          width: 60%;
+      }
+      button.nav{
+          background-color:transparent;
+        color:#000;
+        float:left;
+      }
+       
+            
     
 }

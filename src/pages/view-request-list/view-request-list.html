@@ -19,27 +19,46 @@
   
   
   <ion-content padding>
+      <ion-list style="margin-bottom:0px;" radio-group (ionChange)="viewChanged()" [(ngModel)]="viewSetting">
+          <ion-item  >
+              <ion-card [ngClass]="viewStyle_map ? 'viewStyle' : 'viewStyle-clicked'" (click)="mapView()">
+                  <ion-card-content >
+                     지도로보기
+                  </ion-card-content>
+              </ion-card>
+              <ion-card [ngClass]="viewStyle_list ? 'viewStyle' : 'viewStyle-clicked'" (click)="listView()" >
+                  <ion-card-content >
+                     리스트로 보기 {{cNumber}}
+                  </ion-card-content>
+              </ion-card>
+          </ion-item>
+      </ion-list>
+
+      
       <ion-list>
           <p *ngFor="let item of result_date">{{item}}
               <ion-item  >
-                      <ion-card  *ngFor="let item2 of result" >
-                        <p *ngIf="item === item2.onlyDate">
-                          <ion-card-header style="text-align:center">
-                          오더번호 : {{item2.orderNo}}
-                          <div class="custom" style="margin-top:5px">
-                            <button *ngIf="item2.status=='assigned'" style="float:left" class="chat" ion-button (click)="chat(item2)">Chat</button> 
-                            <button *ngIf="item2.status=='assigned'" style="float:right" class="chat" ion-button (click)="confirm(item2)">배송완료</button> 
-                          </div>
-                          </ion-card-header>
-                           <ion-card-content>
-                          출발역:  {{item2.startPoint}} &nbsp; &nbsp; <br>
-                          도착역:  {{item2.endPoint}} &nbsp; &nbsp; <br>
-                          신청시간 {{item2.create_date}}<br>
-                          
-                          현재상태 :  {{item2.status}} &nbsp; <br>
-                          </ion-card-content>
-                        </p>
-                      </ion-card  >
+                    <p *ngFor="let item2 of result">
+                        <ion-card   *ngIf="item === item2.onlyDate">
+                            <p >
+                              <ion-card-header style="text-align:center">
+                              오더번호 : {{item2.orderNo}}
+                              <div class="custom" style="margin-top:5px">
+                                <button *ngIf="item2.status=='assigned'" style="float:left" class="chat" ion-button (click)="chat(item2)">Chat</button> 
+                                <button *ngIf="item2.status=='assigned'" style="float:right" class="chat" ion-button (click)="confirm(item2)">배송완료</button> 
+                              </div>
+                              </ion-card-header>
+                               <ion-card-content>
+                              출발역:  {{item2.startPoint}} &nbsp; &nbsp; <br>
+                              도착역:  {{item2.endPoint}} &nbsp; &nbsp; <br>
+                              신청시간 {{item2.create_date}}<br>
+                              id : {{item2.user}} <br>
+                              현재상태 :  {{item2.status}} &nbsp; <br>
+                              </ion-card-content>
+                            </p>
+                          </ion-card  >
+                    </p>
+                      
                     </ion-item>
           </p>
       </ion-list>

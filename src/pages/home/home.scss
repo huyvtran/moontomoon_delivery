@@ -14,7 +14,9 @@ page-home {
     text-align: center;
     margin-top: 5px;
 }
-
+.ionmenu{
+    z-index: 11111111;
+}
 .viewStyle{
     width:40%;
     float:left;
@@ -31,9 +33,9 @@ page-home {
     box-shadow:0 3px 5px 3px #999;
 }
     .title{
-        line-height:3rem;
-        float:left;
-        padding:0;
+        line-height: 3rem;
+        float: left;
+        padding: 0;
         width: 30%;
     }
     .title_menu{

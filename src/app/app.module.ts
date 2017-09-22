@@ -1,10 +1,8 @@
 import { NotifiedPage } from './../pages/notified/notified';
 import { ViewRequestListPage } from './../pages/view-request-list/view-request-list';
 import { ViewRequestedAllPage } from './../pages/view-requested-all/view-requested-all';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
 
-import { EndPage } from './../pages/end/end';
-import { StartPage } from './../pages/start/start';
-import { SignupPage } from './../pages/signup/signup';
 import { ProfilePage } from './../pages/profile/profile';
 import { LoginPage } from './../pages/login/login';
 import { ChatPage } from './../pages/chat/chat';
@@ -36,9 +34,9 @@ import { Dialogs } from '@ionic-native/dialogs';
 import { OneSignal } from '@ionic-native/onesignal';
 import { BackgroundGeolocation, BackgroundGeolocationConfig } from '@ionic-native/background-geolocation';
 import { RequestPage } from './../pages/request/request'
-import {AutocompletePage} from '../pages/start/autocomplete';
-import { MetroServiceProvider } from '../providers/metro-service/metro-service';
-
+import { BigpicturePage} from './../pages/bigpicture/bigpicture'
+import { CameraselectPage } from './../pages/cameraselect/cameraselect'
+import { Camera } from '@ionic-native/camera';
   var firebaseConfig = {
      apiKey: "AIzaSyDA8QXihUwFwPuvN2N3Tx44AQQt20wwskk",
     authDomain: "ionic-173108.firebaseapp.com",
@@ -58,15 +56,13 @@ import { MetroServiceProvider } from '../providers/metro-service/metro-service';
     PickupCar,
     LoginPage,
     ProfilePage,
-    SignupPage,
-    StartPage,
-    AutocompletePage,
-    EndPage,
     ViewRequestListPage,
     ViewRequestedAllPage,
     NotifiedPage,
     ChatPage,
-    RequestPage
+    RequestPage,
+    BigpicturePage,
+    CameraselectPage
 
   ],
   imports: [
@@ -87,15 +83,13 @@ import { MetroServiceProvider } from '../providers/metro-service/metro-service';
     PickupCar,
     LoginPage,
     ProfilePage,
-    SignupPage,
-    StartPage,
-    AutocompletePage,
-    EndPage,
     ViewRequestListPage,
     ViewRequestedAllPage,
     NotifiedPage,
     ChatPage,
-    RequestPage
+    RequestPage,
+    BigpicturePage,
+    CameraselectPage
     
     
   ],
@@ -104,15 +98,16 @@ import { MetroServiceProvider } from '../providers/metro-service/metro-service';
     BackgroundGeolocation,
     SplashScreen,
     NativeGeocoder,
+    UniqueDeviceID,
     Dialogs,
     Geolocation,
     AngularFireModule,
+    Camera,
     OneSignal,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CarProvider,
     SimulateProvider,
-    GooglePlus,AngularFireAuth,Keyboard,MapDirective,PickupDirective,
-    MetroServiceProvider
+    GooglePlus,AngularFireAuth,Keyboard,MapDirective,PickupDirective
   ]
 })
 export class AppModule {}

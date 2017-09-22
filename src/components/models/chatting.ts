@@ -3,4 +3,5 @@ export interface Chatting{
     content:string;
     created_date:string;
     onlydate:string;
+    type:string;
 }

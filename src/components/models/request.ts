@@ -12,9 +12,15 @@ export interface request{
     orderNo:string
     onlyDate:string
     deliveryGuy:string
-    uid:string
+    rating_content:string;
+    rating:string;
 
-
-    type:string
+    desired_time:string;
+    type:string;
     request_text:string;
+
+    distance:string
+
+    startDetail:string;
+    endDetail:string;
 }

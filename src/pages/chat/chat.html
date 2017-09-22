@@ -10,7 +10,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>고객 {{deliveryGuy}}님과 대화</ion-title>
+    <ion-title>배송자 {{deliveryGuy}}님과 대화</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -18,50 +18,46 @@
 
 <ion-content  >
     <div class="popup-box chat-popup"  id="qnimate">
-        <div class="popup-head">
-      <div class="popup-head-left pull-left"><img src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" alt="iamgurdeeposahan"> Gurdeep Osahan</div>
-          <div class="popup-head-right pull-right">
-          
-          
-          <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button"><i class="glyphicon glyphicon-off"></i></button>
-                    </div>
-      </div>
+       
     <div class="popup-messages">
       
-    
-    
-    
     <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="direct-chat-messages">
                   
-        <div class="chat-box-single-line" *ngFor="let date of chat_date">
-          <abbr class="timestamp" >{{date}}</abbr>
-          <div class="chatMsg" *ngFor="let item of chatMsg">
-              <div *ngIf="date===item.onlydate&&item.id===userId" class="direct-chat-msg doted-border">
-                  
-                  <div class="direct-chat-text">
+    <div class="chat-box-single-line" *ngFor="let date of chat_date">
+      <abbr class="timestamp" >{{date}}</abbr>
+      <div class="chatMsg" *ngFor="let item of chatMsg">
+          <div *ngIf="date===item.onlydate&&item.id===userId" class="direct-chat-msg doted-border">
+                            <!-- 내 화면 ,   -->
+            <div (click)="clicked(item.content)" class="direct-chat-text" *ngIf="item.type=='foto'">
+                <img src={{item.content}}/>
+              </div>
+              <div class="direct-chat-text" *ngIf="item.type!='foto'">
+                {{item.content}}
+              </div>
+                <div class="direct-chat-info clearfix">
+                <span class="direct-chat-timestamp pull-right">{{item.created_date.substring(10)}}</span>
+              </div>
+    
+            </div>
+
+          <div *ngIf="date===item.onlydate&&item.id!==userId" class="direct-chat-msg2 doted-border2">
+            <!-- 상대방 채팅내용 -->
+            <div class="direct-chat-info clearfix">
+                  <span class="direct-chat-name pull-left">{{item.id}}</span>
+                </div>
+                <img alt="message user image" src="{{image}}" class="direct-chat-img">
+                <div (click)="clicked(item.content)" class="direct-chat-text" *ngIf="item.type=='foto'">
+                    <img src={{item.content}}/>
+                  </div>
+                  <div class="direct-chat-text" style="left:1%" *ngIf="item.type!='foto'">
                     {{item.content}}
                   </div>
-        <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-timestamp pull-right">{{item.created_date.substring(10)}}</span>
-                  </div>
-        
-                  <!-- /.direct-chat-text -->
+                <div class="direct-chat-info clearfix" style="margin-left: 14rem;">
+                  <span class="direct-chat-timestamp pull-left">{{item.created_date.substring(10)}}</span>
                 </div>
-
-                <div *ngIf="date===item.onlydate&&item.id!==userId" class="direct-chat-msg doted-border">
-                    <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">{{item.id}}</span>
-                      </div>
-                      <img alt="message user image" src="{{image}}" class="direct-chat-img">
-                      <div class="direct-chat-text" style="left:1%">
-                        {{item.content}}
-                      </div>
-            <div class="direct-chat-info clearfix" style="margin-left: 20rem;">
-                        <span class="direct-chat-timestamp pull-left">{{item.created_date.substring(10)}}</span>
-                      </div>
-          
-                    <!-- /.direct-chat-text -->
-                  </div>
+    
+              <!-- /.direct-chat-text -->
+            </div>
           </div>
         </div>
         
@@ -73,14 +69,11 @@
                 </div>
     </div>
     <div class="popup-messages-footer">
-          <textarea id="status_message" [(ngModel)]="contents" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>
+            <button style="width:10%; float:left" class="bg_none" (click)="takeFoto()"><i class="glyphicon glyphicon-camera"></i> </button>
+            
+          <textarea  id="status_message" [(ngModel)]="contents" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>
           <button class="enter" (click)="entered()" ion-button >입력</button>
-    <div class="btn-footer">
-    <button class="bg_none"><i class="glyphicon glyphicon-film"></i> </button>
-    <button class="bg_none"><i class="glyphicon glyphicon-camera"></i> </button>
-          <button class="bg_none"><i class="glyphicon glyphicon-paperclip"></i> </button>
-    <button class="bg_none pull-right"><i class="glyphicon glyphicon-thumbs-up"></i> </button>
-    </div>
+    
     </div>
   </div>
   <div class="user">
