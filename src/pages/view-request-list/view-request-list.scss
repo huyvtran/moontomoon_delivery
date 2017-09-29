@@ -13,12 +13,30 @@ page-view-request-list {
         padding:0;
         width: 70%;
     }
+    .floating{
+        border-radius: 10px;
+        width: 25px;
+        font-size: 2rem;
+        position: absolute;
+        background: black;
+        left: 3rem;
+        z-index: 100;
+        float:left;
+        color:white;
+        margin-top:-0.7rem;
+    }
+    .chat{
+        width:32%;
+        background-color: transparent;
+        color: black;
+        border: solid 1px;
+    }
     button.nav{
         background-color:transparent;
       color:#000;
       float:left;
     }
-
+   
     .viewStyle{
         width:40%;
         float:left;

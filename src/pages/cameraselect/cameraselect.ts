@@ -55,5 +55,8 @@ export class CameraselectPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraselectPage');
   }
+  confirm(){
+    this.viewCtrl.dismiss();
+  }
 
 }

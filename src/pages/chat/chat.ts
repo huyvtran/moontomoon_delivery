@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, Content,NavController, ModalController,NavParams } from 'ionic-angular';
+import { IonicPage,AlertController, Content,NavController, ModalController,NavParams } from 'ionic-angular';
 import { Chatting } from '../../components/models/chatting';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { storage } from 'firebase';
@@ -35,58 +35,58 @@ export class ChatPage {
   chat={} as Chatting
   userId:string;
   uid:string;
+  sender:string;
   ionViewWillEnter():void{
   }
   ionViewDidLoad(){
+   
   }
-  constructor(public modal:ModalController,private camera: Camera,public afDatabase : AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public alertCtrl:AlertController,public modal:ModalController,private camera: Camera,public afDatabase : AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams) {
     this.mypicref=firebase.storage().ref('/');
-    var id=localStorage.getItem("id");
-    if(id!=undefined||id!=null){
-    this.userId=id;
-    }else{
-    this.userId="admin"
-    }
-
+    this.userId=localStorage.getItem("id");
     this.item=this.navParams.get("item");
-    this.uid=this.item.uid;
+    this.sender=this.item.user;
+    this.image="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png"
+    console.log(this.item);
+    console.log("thisitem")
+    this.uid=this.item.senderuid;
     this.deliveryGuy=this.item.deliveryGuy;
+
+
     this.chatContent=this.afDatabase.list('message/'+this.item.orderNo, { preserveSnapshot: true })
     this.chatContent.subscribe(snapshots=>{
+      this.chatMsg=[];
+      this.chat_date=[];
       snapshots.forEach(element => {
-        element.val().userId=this.userId;
+        element.val().id=this.userId;
         this.chatMsg.push(element.val())
         this.chat_date.push(element.val().created_date.substring(0,10))
-      //   var keysFiltered = Object.keys(element.val()).filter(function(item){return !( element.val()[item] == undefined)});
-      //  var valuesFiltered = keysFiltered.map((item)=> {
-      //      console.log(item);
-      //      console.log(element.val()[item]);
-      //      if(item=="id"){
-      //       if(element.val()[item]==this.deliveryGuy){
-      //         this.image=element.val()["foto"]
-      //       }else{
-              
-      //       }
-      //      }
-      //  });
+    
       });
+      console.log("idd");
+      console.log(this.chatMsg);
       this.chat_date= this.chat_date.filter(function(elem, index, self) {
         return index == self.indexOf(elem);
     })
     })
 
-    this.items=this.afDatabase.list('profile/'+this.uid, { preserveSnapshot: true })
-    this.items.subscribe(snapshots=>{
-      snapshots.forEach(element => {
-        console.log("element")
-        if(element.key==="foto"){
-          this.image=element.val();
+    var messagenode=this.afDatabase.list('/message/'+this.item.orderNo , { preserveSnapshot: true })
+    messagenode.subscribe(snapshots=>{
+      snapshots.forEach(elements=>{
+        console.log("!?!?!");
+        if(elements.val().id!=this.userId){
+          if(elements.val().read_flag=="false"){
+           console.log(elements.key);
+           var updating=this.afDatabase.object('/message/'+this.item.orderNo+'/'+elements.key)
+           updating.update({
+               read_flag:"true"
+           })
+          }
         }
-       
+      })
       
-
-      });
-    })
+     
+   })
 
   }
   clicked(image){
@@ -116,8 +116,9 @@ export class ChatPage {
           
           this.chat_date=[];
           this.chat.content=this.picurl;
-          this.chat.id=this.item.user;
+          this.chat.id=this.userId;
           this.chat.type="foto";
+          this.chat.read_flag="false";
           let today = new Date();
           let dd:number;
           let day:string;
@@ -150,7 +151,35 @@ export class ChatPage {
     }
   }
   async takeFoto(){
+    // let alert = this.alertCtrl.create({
+      
+    //   buttons: [
+       
+    //     {
+    //       text: '취소',
+    //       handler: data => {
+            
+    //         return;
+    //       }
+    //     },
+    //     {
+    //       text: '카메리',
+    //       handler: data => {
+            
+    //         return;
+    //       }
+    //     },
+    //     {
+    //       text: '확인',
+    //       handler: data => {
+            
+    //         return;
+    //       }
+    //     }
 
+    //   ]
+    //   })
+    //   alert.present();
     let modal = this.modal.create(CameraselectPage);
     modal.onDidDismiss(data => {
       this.picdata=data.data;
@@ -168,7 +197,7 @@ export class ChatPage {
       this.chatMsg=[];
       this.chat_date=[];
       this.chat.content=this.picurl;
-      this.chat.id=this.item.user;
+      this.chat.id=this.userId;
       this.chat.type="foto";
       let today = new Date();
       let dd:number;
@@ -206,7 +235,8 @@ export class ChatPage {
     this.chatMsg=[];
     this.chat_date=[];
     this.chat.content=this.contents;
-    this.chat.id=this.item.user;
+    this.chat.id=this.userId;
+    this.chat.read_flag="false";
     let today = new Date();
     let dd:number;
     let day:string;
@@ -222,7 +252,20 @@ export class ChatPage {
     
     this.chat.created_date=todayWithTime;
     this.chat.onlydate=todayWithTime.substring(0,10)
-    this.afDatabase.list("message/"+this.item.orderNo+"/").push(this.chat); 
+    console.log(this.chat);
+    this.afDatabase.list("message/"+this.item.orderNo+"/").push(this.chat).then(()=>{
+      var notificationObj = {title:{en:"메세지!"}, contents: {en:"배달원으로부터 메세지가 도착하였습니다"},
+      "data": {"status": "chat", "orderNo":this.item.orderNo,"obejct":this.item},
+      include_player_ids: [this.item.tokenId]};
+
+      // Initialize
+      window["plugins"].OneSignal.postNotification(notificationObj,
+        (successResponse)=> {
+          },
+        (error)=>{
+          alert(JSON.stringify(error));
+        }) 
+    })
   }
   
 

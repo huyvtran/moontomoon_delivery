@@ -15,6 +15,10 @@ import { request } from './../../components/models/request';
   templateUrl: 'view-requested-all.html',
 })
 export class ViewRequestedAllPage {
+  order:any;
+  rmodel:any;
+  dateA:any;
+  dateB:any;
   items:any;
   userId:string;
   shown:any;
@@ -24,6 +28,7 @@ export class ViewRequestedAllPage {
   profiles:any;
   result_date=[];
   result_rating=[];
+  uid:string
   constructor(public toast:ToastController,public platform:Platform, public afDatabase: AngularFireDatabase, public navCtrl: NavController,public viewCtrl:ViewController ,public navParams: NavParams,public afd:AngularFireDatabase) {
     var id=localStorage.getItem("id");
 
@@ -33,6 +38,9 @@ export class ViewRequestedAllPage {
     }else{
     this.userId="admin"
     }
+
+      this.uid="KmXYVcVfOxUICaD8yZfXsdRvgPx1";
+  
    this.items=this.afd.list('/requestedList/requestedAll', { preserveSnapshot: true })
      console.log("snapshot????????????????????????????")
      console.log(this.items);
@@ -108,7 +116,101 @@ export class ViewRequestedAllPage {
   }
      
   }
+  getList(value){
+    this.result_date=[];
+    this.result=[];
+    this.items=this.afd.list('/requestedList/requestedAll', { preserveSnapshot: true })
+    this.items.subscribe(snapshots=>{
+   
+        
+     snapshots.forEach(element => {
+         if(element.val().user==this.userId){
+          this.result_date.push(element.val().onlyDate);
+          this.result.push(element.val());
+          this.result_date=Array.from(new Set(this.result_date))
+        }
+     })
+     console.log("date!!")
+     console.log(this.result_date);
+     
+
+     console.log(this.result_date)
+    })
+    if(value=="old"){
+      this.result_date.sort(function(a,b){
+        let dateA = +new Date(a);
+         let dateB = +new Date(b);
+       console.log(dateA);
+       console.log(dateB);
+        return dateA-dateB;
+      })
+    }else if(value=="new"){
+      this.result_date.sort(function(a,b){
+        let dateA = +new Date(a);
+         let dateB = +new Date(b);
+       console.log(dateA);
+       console.log(dateB);
+        return dateB-dateA;
+      })
+    }
+  }
+  orderchanged(){
+    if(this.order!=undefined){
+
+      this.getList(this.order);
+    }
+  }
+  viewPickup(){
+   this.sorting("pickup");
+  }
+  viewRequested(){
+    this.sorting("requested");
+  }
+  viewAssigned(){
+    this.sorting("assigned");
+  }
+  viewFinished(){
+    this.sorting("finished")
+  }
+  changed(){
+    switch (this.rmodel) {
+      case "pickup":
+        this.sorting("pickup")
+        break;
+      case "requested":
+        this.sorting("requested");
+        break;
+      case "assigned":
+        this.sorting("assigned");
+        break;
+      case "finished":
+       this.sorting("finished")
+       break;
+      default:
+        break;
+    }
+  }
+  sorting(value){
+    this.result_date=[];
+    this.result=[];
+    var items=this.afd.list('/requestedList/requestedAll', { preserveSnapshot: true })
+    console.log("snapshot????????????????????????????")
+   items.subscribe(snapshots=>{
+    console.log(snapshots);
  
+    snapshots.forEach(element => {
+      console.log("key value");
+      console.log(element.key);
+        console.log(element.val());
+        console.log(element.val().user+",,,"+this.userId);
+        if(element.val().user==this.userId&&element.val().status==value){
+         this.result_date.push(element.val().onlyDate);
+         this.result.push(element.val());
+         this.result_date=Array.from(new Set(this.result_date))
+       }
+    })
+   })
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad ViewRequestListPage');
   }

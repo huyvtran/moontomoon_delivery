@@ -4,4 +4,5 @@ export interface Chatting{
     created_date:string;
     onlydate:string;
     type:string;
+    read_flag:string;
 }

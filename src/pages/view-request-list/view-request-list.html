@@ -19,20 +19,29 @@
   
   
   <ion-content padding>
-      <ion-list style="margin-bottom:0px;" radio-group (ionChange)="viewChanged()" [(ngModel)]="viewSetting">
-          <ion-item  >
-              <ion-card [ngClass]="viewStyle_map ? 'viewStyle' : 'viewStyle-clicked'" (click)="mapView()">
-                  <ion-card-content >
-                     지도로보기
-                  </ion-card-content>
-              </ion-card>
-              <ion-card [ngClass]="viewStyle_list ? 'viewStyle' : 'viewStyle-clicked'" (click)="listView()" >
-                  <ion-card-content >
-                     리스트로 보기 {{cNumber}}
-                  </ion-card-content>
-              </ion-card>
-          </ion-item>
-      </ion-list>
+        <ion-item>
+                <ion-label>상태를 선택하세요.</ion-label>
+                <ion-select (ionChange)="changed2()" [(ngModel)]="rmodel">
+                  <ion-option value="pickup">픽업</ion-option>
+                  <ion-option value="requested">신청완료</ion-option>
+                  <ion-option value="assigned">매칭완료</ion-option>
+                  <ion-option value="finished">배송완료</ion-option>
+                </ion-select>
+              </ion-item>
+           
+            <ion-list (ionChange)="orderchanged()" radio-group [(ngModel)]="order">
+                    
+                      <ion-item>
+                        <ion-label>오래된 순으로</ion-label>
+                        <ion-radio value="old"></ion-radio>
+                      </ion-item>
+                    
+                      <ion-item>
+                        <ion-label>새 날짜부터</ion-label>
+                        <ion-radio value="new"></ion-radio>
+                      </ion-item>
+                    
+                    </ion-list>
 
       
       <ion-list>
@@ -44,13 +53,29 @@
                               <ion-card-header style="text-align:center">
                               오더번호 : {{item2.orderNo}}
                               <div class="custom" style="margin-top:5px">
-                                <button *ngIf="item2.status=='assigned'" style="float:left" class="chat" ion-button (click)="chat(item2)">Chat</button> 
-                                <button *ngIf="item2.status=='assigned'" style="float:right" class="chat" ion-button (click)="confirm(item2)">배송완료</button> 
+                                  <ng-container *ngFor="let item3 of notification">
+                                      <p class="floating" *ngIf="item3.orderNo == item2.orderNo&&item3.value!=0">
+                                        
+                                          {{item3.value}}
+                                          
+                                      </p>
+                                      
+                                    </ng-container>
+                                    <button *ngIf="item2.status=='assigned'||item2.status=='pickup'" style="float:left" class="chat" ion-button (click)="chat(item2)"><ion-icon name="chatboxes" style="margin-right: 0.4rem;"></ion-icon> Chat</button> 
+                                    
+                                <button *ngIf="item2.status=='pickup'" style="float:right; width:32%;" class="chat" ion-button (click)="confirm(item2)"><i class="material-icons">done</i>배송완료</button> 
+                                <button *ngIf="item2.status=='assigned'" style="float:right; width:32%;" class="chat" ion-button (click)="pickup(item2)"><i class="material-icons">done</i>픽업완료</button> 
+                                <button *ngIf="item2.status=='assigned'||item2.status=='pickup'"   class="chat" ion-button (click)="call(item2)"> <ion-icon name="call" style="margin-right: 0.4rem;"></ion-icon> 전화</button> 
                               </div>
                               </ion-card-header>
                                <ion-card-content>
+                                  
+                                  
+                                   
                               출발역:  {{item2.startPoint}} &nbsp; &nbsp; <br>
+                              <p style="margin:0px;" *ngIf="item2.startDetail!=''">출발상세: {{startDetail}}</p>
                               도착역:  {{item2.endPoint}} &nbsp; &nbsp; <br>
+                              <p style="margin:0px;" *ngIf="item2.endDetail!=''">도착상세: {{endDetail}}</p>
                               신청시간 {{item2.create_date}}<br>
                               id : {{item2.user}} <br>
                               현재상태 :  {{item2.status}} &nbsp; <br>

@@ -16,6 +16,29 @@
   
   
   <ion-content padding>
+      <ion-item>
+          <ion-label>상태를 선택하세요.</ion-label>
+          <ion-select (ionChange)="changed()" [(ngModel)]="rmodel">
+            <ion-option value="pickup">픽업</ion-option>
+            <ion-option value="requested">신청완료</ion-option>
+            <ion-option value="assigned">매칭완료</ion-option>
+            <ion-option value="finished">배송완료</ion-option>
+          </ion-select>
+        </ion-item>
+      
+      <ion-list (ionChange)="orderchanged()" radio-group [(ngModel)]="order">
+              
+                <ion-item>
+                  <ion-label>오래된 순으로</ion-label>
+                  <ion-radio value="old"></ion-radio>
+                </ion-item>
+              
+                <ion-item>
+                  <ion-label>새 날짜부터</ion-label>
+                  <ion-radio value="new"></ion-radio>
+                </ion-item>
+              
+              </ion-list>
       <ion-list>
           <p *ngFor="let item of result_date">{{item}}
               <ion-item  >
@@ -29,12 +52,12 @@
                           </div>
                           </ion-card-header>
                            <ion-card-content>
-                          출발역:  {{item2.startPoint}} &nbsp; &nbsp; <br>
-                          도착역:  {{item2.endPoint}} &nbsp; &nbsp; <br>
+                          출발역:  {{item2.startPoint}} ,{{item2.startDetail}} <br>
+                          도착역:  {{item2.endPoint}} ,{{item2.endDetail}} <br>
                           신청시간 {{item2.create_date}}<br>
                           <p *ngIf="item2.status=='finished'">
                             rating : {{item2.rating}}<br>
-                            평가내용 : {{item2.content}}<br>
+                            평가내용 : {{item2.rating_content}}<br>
                           </p>
                           현재상태 :  {{item2.status}} <br>
                           </ion-card-content>

@@ -2,6 +2,7 @@ import { NotifiedPage } from './../pages/notified/notified';
 import { ViewRequestListPage } from './../pages/view-request-list/view-request-list';
 import { ViewRequestedAllPage } from './../pages/view-requested-all/view-requested-all';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { CallNumber } from '@ionic-native/call-number';
 
 import { ProfilePage } from './../pages/profile/profile';
 import { LoginPage } from './../pages/login/login';
@@ -32,11 +33,11 @@ import firebase from 'firebase';
 import {Keyboard} from '@ionic-native/keyboard';
 import { Dialogs } from '@ionic-native/dialogs';
 import { OneSignal } from '@ionic-native/onesignal';
-import { BackgroundGeolocation, BackgroundGeolocationConfig } from '@ionic-native/background-geolocation';
 import { RequestPage } from './../pages/request/request'
 import { BigpicturePage} from './../pages/bigpicture/bigpicture'
 import { CameraselectPage } from './../pages/cameraselect/cameraselect'
 import { Camera } from '@ionic-native/camera';
+import { NewpagePage } from './../pages/newpage/newpage'
   var firebaseConfig = {
      apiKey: "AIzaSyDA8QXihUwFwPuvN2N3Tx44AQQt20wwskk",
     authDomain: "ionic-173108.firebaseapp.com",
@@ -62,7 +63,8 @@ import { Camera } from '@ionic-native/camera';
     ChatPage,
     RequestPage,
     BigpicturePage,
-    CameraselectPage
+    CameraselectPage,
+    NewpagePage
 
   ],
   imports: [
@@ -89,18 +91,19 @@ import { Camera } from '@ionic-native/camera';
     ChatPage,
     RequestPage,
     BigpicturePage,
-    CameraselectPage
+    CameraselectPage,
+    NewpagePage
     
     
   ],
   providers: [
     StatusBar,
-    BackgroundGeolocation,
     SplashScreen,
     NativeGeocoder,
     UniqueDeviceID,
     Dialogs,
     Geolocation,
+    CallNumber,
     AngularFireModule,
     Camera,
     OneSignal,

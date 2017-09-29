@@ -3,10 +3,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { PhoneNumber } from './../../components/models/phonenumber';
 import { ProfilePage } from './../../pages/profile/profile';
 import { User } from './../../components/models/user';
-import { SignupPage } from './../signup/signup';
 import { HomePage } from './../../pages/home/home';
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, LoadingController,NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, Platform,LoadingController,NavController, NavParams, ToastController } from 'ionic-angular';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { AngularFireModule} from 'angularfire2';
 import firebase from 'firebase';
@@ -52,12 +51,13 @@ export class LoginPage implements OnInit {
   flag:boolean=false;
   distance:any;
   foto:any;
-  constructor(private uniqueDeviceID: UniqueDeviceID,public http:Http,public loading:LoadingController,public toast:ToastController, public afAuth : AngularFireAuth,public afDatabase:AngularFireDatabase, public navCtrl: NavController,public googleplus:GooglePlus,public afauth:AngularFireAuth,public afd:AngularFireDatabase) {
+  flag_chat=false;
+  constructor(public platform:Platform,private uniqueDeviceID: UniqueDeviceID,public http:Http,public loading:LoadingController,public toast:ToastController, public afAuth : AngularFireAuth,public afDatabase:AngularFireDatabase, public navCtrl: NavController,public googleplus:GooglePlus,public afauth:AngularFireAuth,public afd:AngularFireDatabase) {
     let today = new Date();
     let dd:number;
     let day:string;
     let month:string;
-    
+    alert("login")
      dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
 
@@ -68,7 +68,22 @@ export class LoginPage implements OnInit {
     mm<10?month='0'+mm:month=''+mm;
     this.todayWithTime = yyyy+'/'+month+'/'+day+' '+time;
     console.log(time);
-    
+    if(this.platform.is("android")){
+      window["plugins"].OneSignal
+      .startInit("2192c71b-49b9-4fe1-bee8-25617d89b4e8", "916589339698")
+      .handleNotificationOpened((jsonData)=> {
+        let value=jsonData.notification.payload.additionalData
+        if(value.status=="chat"){
+        alert("chat");
+        this.flag_chat=true;
+
+         }else{
+
+         }
+      
+      })
+      .endInit();
+    }
     this.loginflag=localStorage.getItem("googleLoggedIn")
   }
   ionViewDidLoad(){
@@ -241,11 +256,12 @@ export class LoginPage implements OnInit {
                         lastLogin:this.todayWithTime
                       })
                       this.thingToUnsubscribeFromLater.unsubscribe();
-                      this.navCtrl.setRoot(HomePage,{notification:this.statusParam,notificationValue:this.name,foto:this.foto,distance:this.distance});
-                  }
+                     }
                   
 
                 })
+                this.navCtrl.setRoot(HomePage,{notification:this.statusParam,notificationValue:this.name,foto:this.foto,distance:this.distance});
+                
                 
                 
               }

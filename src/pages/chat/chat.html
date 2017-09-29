@@ -10,7 +10,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>배송자 {{deliveryGuy}}님과 대화</ion-title>
+    <ion-title>{{sender}} 님과 대화</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -69,8 +69,7 @@
                 </div>
     </div>
     <div class="popup-messages-footer">
-            <button style="width:10%; float:left" class="bg_none" (click)="takeFoto()"><i class="glyphicon glyphicon-camera"></i> </button>
-            
+            <button  class="bg_none" (click)="takeFoto()"><i class="glyphicon glyphicon-camera"></i> </button>
           <textarea  id="status_message" [(ngModel)]="contents" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>
           <button class="enter" (click)="entered()" ion-button >입력</button>
     

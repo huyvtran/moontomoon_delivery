@@ -14,7 +14,6 @@ import {Keyboard} from '@ionic-native/keyboard';
 import firebase from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { OneSignal } from '@ionic-native/onesignal';
-import { BackgroundGeolocation, BackgroundGeolocationConfig } from '@ionic-native/background-geolocation';
 import { TimeService } from './../../shared/time'
 import { Geolocation } from '@ionic-native/geolocation';
 
@@ -84,13 +83,38 @@ export class HomePage implements OnInit,OnChanges  {
   changed2:boolean=false;
   cNumber:any;
   name:any;
+  uid:string;
+  id:string;
+  messengerFoto:string;
   constructor(public toast: ToastController,public m : MapDirective, public navCtrl: NavController,public navParam:NavParams ,public mapDirective:MapDirective, public modalCtrl:ModalController, public loading:LoadingController,  
     private geo:Geolocation,private afDatabase:AngularFireDatabase,public afAuth : AngularFireAuth,private googleplus:GooglePlus,public t:TimeService
-  ,private oneSignal: OneSignal, public platform:Platform,private backgroundGeolocation: BackgroundGeolocation,public http:Http) {
-    var id=localStorage.getItem("id");
-    this.imageUrl=localStorage.getItem("foto");
-    this.name=localStorage.getItem("name");
-    this.phone=localStorage.getItem("phone");
+  ,private oneSignal: OneSignal, public platform:Platform,public http:Http) {
+    this.uid=localStorage.getItem("uid");
+    if(this.uid==undefined){
+      this.uid="KmXYVcVfOxUICaD8yZfXsdRvgPx1"
+    }
+    var getFotos=this.afDatabase.list('profile/'+this.uid, { preserveSnapshot: true })
+    getFotos.subscribe(snapshots=>{
+      snapshots.forEach(element => {
+        console.log("element")
+        if(element.key==="foto"){
+            this.messengerFoto=element.val();
+        }
+        if(element.key==="id"){
+            this.id=element.val();
+            localStorage.setItem("id",this.id)
+        }
+        if(element.key==="name"){
+          this.name=element.val();
+        }
+        if(element.key==="phone"){
+          this.phone=element.val();
+        }
+        if(element.key==="foto"){
+          this.imageUrl=element.val();
+        }
+      });
+    })
     var obj=this.afDatabase.list("/requestedList/requestedAll", { preserveSnapshot: true });
     var countstart=0;
     obj.subscribe(snapshots=>{
@@ -119,12 +143,8 @@ export class HomePage implements OnInit,OnChanges  {
     })
     
     
-    if(id!=undefined||id!=null){
-    this.userId=id;
-    }else{
-    this.userId="admin"
-    }
-    this.distanceSetting="5000";
+    
+    this.distanceSetting="1000";
     this.distanceSetting=parseInt(this.distanceSetting);
     if(this.imageUrl==undefined){
       this.imageUrl="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png"
@@ -135,12 +155,12 @@ export class HomePage implements OnInit,OnChanges  {
     console.log("Homepage on change");
 
     
-    this.afAuth.authState.subscribe(auth=>{
-      if(auth!=null||auth!=undefined){
-        localStorage.setItem("uid",auth.uid);
-     }
+    // this.afAuth.authState.subscribe(auth=>{
+    //   if(auth!=null||auth!=undefined){
+    //     localStorage.setItem("uid",auth.uid);
+    //  }
        
-     })
+    //  })
     
 
    
@@ -396,6 +416,12 @@ export class HomePage implements OnInit,OnChanges  {
   requesting(itemObject){
     this.request=itemObject;
     this.request.status="assigned";
+    this.request.messengeruid=this.uid;
+    this.request.deliveryGuy=this.id;
+    this.request.messengerName=this.name;
+    this.request.messengerFoto=this.messengerFoto;
+    this.request.messengerPhone=this.phone;
+    console.log(this.request);
     this.afDatabase.object('/requestedList/requested/'+itemObject.orderNo).remove();
     this.afDatabase.object('/requestedList/assigned/'+itemObject.orderNo).set(this.request);
     this.afDatabase.object('/requestedList/requestedAll/'+itemObject.orderNo).set(this.request);
@@ -418,63 +444,119 @@ export class HomePage implements OnInit,OnChanges  {
     include_player_ids: [itemObject.tokenId]};
     if(this.platform.is('android')){
       alert("android")
+      this.result_date=[];
+      this.result=[];
+      console.log("initialized")
+      console.log(this.result);
+      console.log(this.result_date);
+  
+      var requestList=this.afDatabase.list('/requestedList/requestedAll/', { preserveSnapshot: true })
+      console.log("refreshing????????????????????????????")
+      console.log(this.items);
+      requestList.subscribe(snapshots=>{
+      console.log(snapshots);
+   
+      snapshots.forEach(element => {
+        console.log("key value222222");
+          if(element.val().status=="requested"&&element.val().distance<=this.distanceSetting){
+             this.result_date.push(element.val().onlyDate);
+             this.result_date=Array.from(new Set(this.result_date))
+             this.result.push(element.val());
+             this.result=Array.from(new Set(this.result))
+             
+             console.log(element.val());
+             console.log(this.result);
+             console.log(this.result_date);
+          }
+         
+   
+   
+      })
+     })
+     if(this.platform.is('android')){
       window["plugins"].OneSignal.postNotification(notificationObj,
-          (successResponse)=> {
-              
-              let toast = this.toast.create({
-                  message: '정상적으로 신청완료 되었습니다.',
-                  duration: 3000,
-                  position: 'middle'
-                });
-              
-                toast.onDidDismiss(() => {
-                  console.log('Dismissed toast');
-                });
-              
-                toast.present();
+        (successResponse)=> {
+            
+            let toast = this.toast.create({
+                message: '정상적으로 신청완료 되었습니다.',
+                duration: 3000,
+                position: 'middle'
+              });
+            
+              toast.onDidDismiss(() => {
+                console.log('Dismissed toast');
+              });
+            
+              toast.present();
 
-          },
-          function (failedResponse) {
-          console.log("Notification Post Failed: ", failedResponse);
-          });
+        },
+        function (failedResponse) {
+        console.log("Notification Post Failed: ", failedResponse);
+        });
+     }
+     
 
           
+  }else if(this.platform.is('ios')){
+    
   }else{
     alert("web!")
-    this.result_date=[];
-    this.result=[];
-    console.log("initialized")
-    console.log(this.result);
-    console.log(this.result_date);
-
-    var requestList=this.afDatabase.list('/requestedList/requestedAll/', { preserveSnapshot: true })
-    console.log("refreshing????????????????????????????")
-    console.log(this.items);
-    requestList.subscribe(snapshots=>{
-    console.log(snapshots);
- 
-    snapshots.forEach(element => {
-      console.log("key value222222");
-        if(element.val().status=="requested"&&element.val().distance<=this.distanceSetting){
-           this.result_date.push(element.val().onlyDate);
-           this.result_date=Array.from(new Set(this.result_date))
-           this.result.push(element.val());
-           this.result=Array.from(new Set(this.result))
-           
-           console.log(element.val());
-           console.log(this.result);
-           console.log(this.result_date);
-        }
-       
- 
- 
-    })
-   })
-    alert("not applicable on web. ")
+    console.log(this.request);
   }
   this.changed2=!this.changed2;
   // this.kmChanged();
+
+  this.result=[];
+  this.result_date=[];
+  var requestList=this.afDatabase.list('/requestedList/requested/', { preserveSnapshot: true })
+  console.log("kmChanged????????????????????????????")
+  console.log(this.items);
+  requestList.subscribe(snapshots=>{
+  console.log(snapshots);
+  
+  
+  snapshots.forEach(element => {
+      console.log("!!!!!")
+      console.log(this.result);
+      console.log("????");
+      console.log(element.val().distance);
+      console.log(this.distanceSetting);
+      var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(element.val().startLat,element.val().startLng),
+      new google.maps.LatLng(this.myCurrentlat,this.myCurrentlng));   
+        console.log(distance);
+        console.log(this.myCurrentlat+",,"+this.myCurrentlng);
+        console.log("homedistance!")
+        distance=parseInt(distance);
+      if(distance<=this.distanceSetting){
+         this.result_date.push(element.val().onlyDate);
+         
+         
+         this.result_date=Array.from(new Set(this.result_date))
+         this.result.push(element.val());
+         this.result=Array.from(new Set(this.result))
+         console.log("key value");
+         console.log(element.val());
+         console.log(this.result);
+         console.log(this.result_date);
+      }
+      
+     
+
+
+  })
+  console.log("value for spread");
+  console.log(this.result);
+  if(this.result.length==0){
+    this.showOrNot=false;
+  }else{
+    this.showOrNot=true;
   }
+  
+ })
+  }
+
+
+
   ngOnChanges() {
     alert("home ngchanged")
   }

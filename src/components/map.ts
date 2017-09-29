@@ -17,7 +17,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Dialogs } from '@ionic-native/dialogs';
 import { OneSignal } from '@ionic-native/onesignal';
 import { Observable, Subscription } from 'rxjs/Rx';
-
+import { ChatPage } from './../pages/chat/chat'
 declare var google;
 
 @Component({
@@ -89,6 +89,7 @@ export class MapDirective implements OnInit,OnChanges  {
      check_true:boolean;
      count3:number=0;
      c:number=0;
+     name:string;
      public navCtrl:NavController;
 
     constructor( public toast:ToastController,private app:App,public loading:LoadingController,public platform:Platform, public http:Http, 
@@ -103,10 +104,11 @@ export class MapDirective implements OnInit,OnChanges  {
     this.check_true=false;
    this.uid=localStorage.getItem("uid");
    if(this.uid==undefined){
-       this.uid="ababababab"
+       this.uid="KmXYVcVfOxUICaD8yZfXsdRvgPx1"
    }
     var id=localStorage.getItem("id");
     this.foto=localStorage.getItem("foto")
+
     if(id!=undefined||id!=null){
     this.userId=id;
     }else{
@@ -122,15 +124,10 @@ export class MapDirective implements OnInit,OnChanges  {
 .startInit("2192c71b-49b9-4fe1-bee8-25617d89b4e8", "916589339698")
 .handleNotificationOpened((jsonData)=> {
     let value=jsonData.notification.payload.additionalData
-    if(value.welcome){
-        let modal = this.modal.create(NotifiedPage,{name:value.name});
-        let me = this;
-        modal.onDidDismiss(data => {
-            this.fetchingExpress=true;
-        });
-        modal.present();
-    }else{
-        alert("nope");
+    if(value.status=="chat"){
+        alert("chatk!")
+        this.navCtrl.push(ChatPage,{"item":value.object})
+       
     }
 
 })
@@ -200,7 +197,7 @@ export class MapDirective implements OnInit,OnChanges  {
 
             console.log(element.val().startLat+",,,"+element.val().startLng)
             console.log(this.myCurrentlat+",,,"+this.myCurrentlng)
-
+            console.log(element.val())
             if(this.distanceSetting>distance){
                 console.log("!!!!");
                 this.requestedRoute.push({type:element.val().type,orderNo:element.val().orderNo,
@@ -209,7 +206,7 @@ export class MapDirective implements OnInit,OnChanges  {
                     create_date:element.val().create_date, startPoint:element.val().startPoint,
                     endPoint:element.val().endPoint,status:element.val().status,
                      desiredTime:element.val().desired_time,startDetail:element.val().startDetail,
-                     endDetail:element.val().endDetail,
+                     endDetail:element.val().endDetail,senderuid:element.val().senderuid,
                      request:element.val().request_text,distance:element.val().distance})
                             console.log(this.requestedRoute);
             }
@@ -269,15 +266,12 @@ export class MapDirective implements OnInit,OnChanges  {
             var endLat=this.requestedRoute[k].endLat;
             var endLng=this.requestedRoute[k].endLng;
             var create_date=this.requestedRoute[k].create_date;
-            var tokenId=this.requestedRoute[k].tokenId;
             var distance=this.requestedRoute[k].distance;
             var startDetail=this.requestedRoute[k].startDetail;
             var endDetail=this.requestedRoute[k].endDetail;
             var desiredTime=this.requestedRoute[k].desiredTime;
-
-            if(tokenId==undefined){
-                tokenId="abcde"
-            }
+            var senderuid=this.requestedRoute[k].senderuid;
+            var tokenId=this.requestedRoute[k].tokenId;
             var user=this.requestedRoute[k].user;
             var orderNo=this.requestedRoute[k].orderNo;
             var weight=this.requestedRoute[k].weight;
@@ -297,15 +291,36 @@ export class MapDirective implements OnInit,OnChanges  {
             this.request.status="assigned";
             this.request.orderNo=orderNo;
             this.request.onlyDate=create_date.substring(0,10);
-            this.request.deliveryGuy="not defined yet";
-            this.request.deliveryGuy=this.userId;
             this.request.distance=distance;
-            this.request.tokenId="tokenId";
             this.request.type=this.requestedRoute[k].type;
             this.request.request_text=request_message;
             this.request.startDetail=startDetail;
             this.request.endDetail=endDetail;
             this.request.desired_time=desiredTime;
+            this.request.senderuid=senderuid;
+            this.request.messengeruid=this.uid;
+            this.request.tokenId=tokenId;
+            var getFotoAndName=this.afDatabase.list('profile/'+this.uid, { preserveSnapshot: true })
+            getFotoAndName.subscribe(snapshots=>{
+              snapshots.forEach(element => {
+                console.log("element")
+                if(element.key==="foto"){
+                    this.request.messengerFoto=element.val();
+                }
+                if(element.key==="name"){
+                    this.request.messengerName=element.val();
+                }
+                if(element.key==="id"){
+                    this.request.deliveryGuy=element.val();
+                }
+                if(element.key=="phone"){
+                    this.request.messengerPhone=element.val();
+                }
+               
+              
+        
+              });
+            })
             console.log(this.request);
             this.navCtrl.push(RequestPage,{object:this.request})
             
@@ -525,7 +540,15 @@ ngOnChanges() {
                     fillColor: 'green'
                   });
                   this.circleMarker.bindTo('center', this.centerMarker, 'position');
-        
+                  if(this.distanceSetting<1500){
+                    this.map.setZoom(14);
+                  }else if(this.distanceSetting<3001){
+                      this.map.setZoom(13);
+                  }else if(this.distanceSetting==5000){
+                      this.map.setZoom(12)
+                  }else if(this.distanceSetting>5000){
+                      this.map.setZoom(11);
+                  }
             }
            
         
@@ -571,7 +594,7 @@ this.centerLocation(location);
     createMap(location=new google.maps.LatLng(37.5665,126.9780)){
         let mapOptions={
             center:location,
-            zoom:12,
+            zoom:14,
             disableDefaultUI: false
         }
         let mapEl=document.getElementById('map');
@@ -582,7 +605,7 @@ this.centerLocation(location);
         return map;
     }
         getCurrentLocation2(){
-          
+            this.centerMarker="";
             var loca
             let loading=this.loading.create({
               content:'위치정보를 받아오는 중23…'
@@ -612,7 +635,7 @@ this.centerLocation(location);
               })
               this.circleMarker = new google.maps.Circle({
                 map: this.map,
-                radius: 5000,    // 10 miles in metres
+                radius: 1000,    // 10 miles in metres
                 fillColor: 'green'
               });
                 this.circleMarker.bindTo('center', this.centerMarker, 'position');

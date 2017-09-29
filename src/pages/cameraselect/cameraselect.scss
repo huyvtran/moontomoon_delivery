@@ -12,10 +12,16 @@ page-cameraselect {
         margin-left: auto;
         margin-right: auto;
     }
-    img{
-        width:100%;
-        height:100%;
+    .btn{
+        background: transparent;
+        color: black;
+        border: solid 1px;
     }
+   .img{
+    width: 70%;
+    text-align: center;
+    margin-left: 15%;
+   }
     .content{
         height: 85%;
         width:100%;
@@ -41,6 +47,9 @@ page-cameraselect {
     }
     .confirm{
       width:100%;
+      background: transparent;
+      color: black;
+      border: solid 1px;
     }
       .main-view{
           background: transparent;
@@ -69,8 +78,8 @@ page-cameraselect {
           top: calc(50% - (60%/2));
           left: 0;
           right: 0;
-          width: 90%;
-          height: 75%;
+          width: 80%;
+          height: auto;
           padding: 10px;
           z-index: 100;
           margin: 0 auto;

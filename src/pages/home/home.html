@@ -26,20 +26,20 @@
           </div>  
           <div class="radio_content">
               <ion-item class="km" >
+                  <ion-label>1km</ion-label>
+                  <ion-radio checked value="1000" ></ion-radio>
+              </ion-item>
+              <ion-item class="km" >
+                  <ion-label>3km</ion-label>
+                  <ion-radio  value="3000"></ion-radio>
+              </ion-item>
+              <ion-item class="km" >
                   <ion-label>5km</ion-label>
-                  <ion-radio checked value="5000" ></ion-radio>
-              </ion-item>
-              <ion-item class="km" >
-                  <ion-label>10km</ion-label>
-                  <ion-radio  value="10000"></ion-radio>
-              </ion-item>
-              <ion-item class="km" >
-                  <ion-label>15km</ion-label>
-                  <ion-radio  value="15000"></ion-radio>
+                  <ion-radio  value="5000"></ion-radio>
               </ion-item>
               <ion-item class="km">
-                  <ion-label>20km</ion-label>
-                  <ion-radio  value="20000"></ion-radio>
+                  <ion-label>10km</ion-label>
+                  <ion-radio  value="10000"></ion-radio>
               </ion-item>
           </div>
            
@@ -151,7 +151,7 @@
       <ion-list>
           <div class="profile">
               <img class="img" src="{{imageUrl}}"/>
-              <p>{{userId}}</p>
+              <p>{{id}}</p>
               <p>{{phone}}</p>
               <p>{{name}}</p>
           </div>
